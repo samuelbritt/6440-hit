@@ -43,6 +43,7 @@
         draw,
         shape=cloud,
         aspect=2,
+        inner sep=1ex,
       },
     db/.style=
       {
@@ -56,6 +57,12 @@
         sloped,
         font=\tiny,
       },
+    every pin/.style=
+     {
+       pin edge={red, -},
+       red,
+       font=\footnotesize,
+     }
   }
 
 \begin{document}
@@ -63,7 +70,8 @@
 \begin{tikzpicture}
   \node[our code, text height=] (HVPC) {HV\\Patient\\Connect};
   \node[above=.5 of HVPC] (event) {Event};
-  \node[our code, above=.5 of event] (portal) {Portal};
+  \node[our code, above=.5 of event, pin=above right:Role? Push only?
+  Auth issues?] (portal) {Portal};
   \node[above=of portal] (pcp) {PCP};
   \node[their code, right=.5 of pcp] (emr) {EMR};
 
@@ -86,7 +94,7 @@
   \end{scope}
 
   \path (HVPC.west) -- coordinate (aux) (HVPC-|input.east);
-  \node[db] at (mgmt-|aux) (DB) {DB};
+  \node[db,pin={below right:What data is necessary?}] at (mgmt-|aux) (DB) {DB};
 
   \node
     [
@@ -94,18 +102,23 @@
       draw,
       rectangle,
       fill=black!20,
-      rotate=90, anchor=center,
+      rotate=90,
+      anchor=center,
       font=\footnotesize,
       text width=3.5cm,
     ]
-    (policy wall) {Policy?};
+    (policy wall) {Policy};
+
+  \node[pin={below right:What policy?}]
+      at (policy wall.180 + 10) {};
 
   \begin{scope}[node distance=.7,
       every node/.style={our code, draw=none, fill=none},
   ]
     \node[left=2 of input.west] (RN) {RN};
     \node[below=of RN.east, anchor=east] (oncologist) {Oncologist};
-    \node[below=of oncologist.east, anchor=east] (data manager) {Data Manager};
+    \node[below=of oncologist.east, anchor=east, pin={north west:Role?}]
+    (data manager) {Data Manager};
     \node[below=of data manager.east, anchor=east] (trust officer) {IT Trust Officer};
   \end{scope}
 
@@ -161,14 +174,17 @@
   \draw[<->] (mgmt) -- (data manager);
   \draw[<->] (trust officer) -- (policy wall.north|-trust officer);
 
-  \draw[<->, out=180,in=-90] (output) to node[edge label, above, near
-  end] {\CCD} (holon);
+  \draw[out=90, in=0]
+    (output) to node[edge label, above] {\CCD} (holon);
+  \draw(holon) to [out=-90, in=-180]
+    node[edge label, above] {\CCD}
+    node[near start] (anchor) {}
+    (input.170);
+  \node[pin={left:Policy?}] at (anchor) {};
   \draw[<->] (holon) -- node[edge label, above] {\MDWS} (vista);
 
   \draw[<->] (portal) -- (pcp);
   \draw[<->] (pcp) -- (emr);
-
 \end{tikzpicture}
-
 
 \end{document}
