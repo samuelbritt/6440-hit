@@ -1,0 +1,14 @@
+﻿body {
+}
+
+#authParticipantsList
+{
+    clear: both;
+    float: left;
+}
+
+#authParticipantsList select
+{
+    display:block;
+    width:350px;
+}
