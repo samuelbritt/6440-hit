@@ -1,14 +1,46 @@
-﻿body {
+﻿body
+{
 }
 
 #authParticipantsList
 {
-    clear: both;
-    float: left;
+    display: inline-block;
+    vertical-align: top;
 }
 
 #authParticipantsList select
 {
-    display:block;
-    width:350px;
+    display: block;
+    width: 350px;
+}
+
+#authParticipantsList #lastUpdate
+{
+    display: block;
+    padding-top: .2em;
+}
+
+#enrollNewParticipant
+{
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 1em;
+}
+
+#enrollNewParticipant #enrollLabel
+{
+    text-align: left;
+    padding: 0;
+}
+
+#enrollNewParticipant label
+{
+    display: block;
+    text-align: right;
+    padding-top: 1.5em;
+}
+
+#enrollNewParticipant input[type="text"]
+{
+    margin-left: .5em;
 }
