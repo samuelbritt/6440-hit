@@ -24,15 +24,11 @@ public partial class Default : System.Web.UI.Page
     {
         LastUpdateLabel.Text = getLastAuthUpdate();
 
-        //ConnectionStringSettings settings = ConfigurationManager.ConnectionStrings["DatabaseConnectionString"];
-        ////String connectionString = "Data Source=.\SQLEXPRESS;"
-        ////+ "AttachDbFilename=|DataDirectory|\Database.mdf;"
-        ////+ "Integrated Security=True;"
-        ////+ "User Instance=True";
-        //using (SqlConnection connection = new SqlConnection(settings.ConnectionString))
-        //{
-        //    connection.Open();
-        //}
+        ConnectionStringSettings settings = ConfigurationManager.ConnectionStrings["DatabaseConnectionString"];
+        using (SqlConnection connection = new SqlConnection(settings.ConnectionString))
+        {
+            connection.Open();
+        }
     }
 
     protected void btnEnroll_Click(object sender, EventArgs e)
