@@ -40,7 +40,6 @@ public partial class Default : System.Web.UI.Page
     {
         foreach (Control ctrl in control.Controls)
         {
-            Debug.WriteLine(ctrl);
             if (ctrl is TextBox)
             {
                 ((TextBox)ctrl).Text = String.Empty;
@@ -62,12 +61,15 @@ public partial class Default : System.Web.UI.Page
 
     protected void btnEnroll_Click(object sender, EventArgs e)
     {
-        // TODO: validate input
+        if (!IsValid)
+            return;
+
         String firstName = PatientFirstNameTextBox.Text;
         String lastName = PatientLastNameTextBox.Text;
         String email = PatientEmailTextBox.Text;
         String securityQuestion = SecurityQuestionTextBox.Text;
         String securityAnswer = SecurityAnswerTextBox.Text;
+
         enrollNewParticipant(firstName, lastName, email, securityQuestion, securityAnswer);
         ClearTextBoxes();
     }
