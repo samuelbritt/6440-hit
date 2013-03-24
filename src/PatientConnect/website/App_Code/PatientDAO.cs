@@ -77,22 +77,27 @@ public class PatientDAO
         command.Parameters.AddWithValue("@securityAnswer", patient.SecurityAnswer);
         command.Parameters.AddWithValue("@hasAuthorized", patient.HasAuthorized);
 
-        int newID = 0;
+        int newID = ExecuteScalar(command);
+        return newID;
+    }
+
+    private static int ExecuteScalar(SqlCommand command)
+    {
+        int result = 0;
         using (SqlConnection conn = Database.NewConnection())
         {
             command.Connection = conn;
             try
             {
                 conn.Open();
-                newID = (int)command.ExecuteScalar();
+                result = (int)command.ExecuteScalar();
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
             }
         }
-
-        return newID;
+        return result;
     }
 
     /// <summary>
@@ -101,42 +106,56 @@ public class PatientDAO
     /// <returns>List of authorized Patient objects</returns>
     public ICollection<Patient> getAuthorizedPatients()
     {
-        List<Patient> patientList = new List<Patient>();
         string query = String.Format("SELECT * FROM {0} WHERE {1}=1 ORDER BY {2}",
                                      Table.TABLE_NAME, Table.HAS_AUTHORIZED, Table.LAST_NAME);
         SqlCommand command = new SqlCommand(query);
+        DataTable dataTable = new DataTable();
+        ExecuteFillDataTable(command, dataTable);
+        ICollection<Patient> patientList = PatientCollectionFromDataTable(dataTable);
+        dataTable.Dispose();
+        return patientList;
+    }
 
+    private static void ExecuteFillDataTable(SqlCommand command, DataTable dataTable)
+    {
         using (SqlConnection conn = Database.NewConnection())
         {
             command.Connection = conn;
+            SqlDataAdapter adapter = new SqlDataAdapter(command);
             try
             {
                 conn.Open();
-
-                SqlDataAdapter adapter = new SqlDataAdapter(command);
-                DataTable dataTable = new DataTable();
                 adapter.Fill(dataTable);
-                foreach (DataRow row in dataTable.Rows)
-                {
-                    Patient patient = new Patient();
-                    patient.ID = (int)row[Table.PATIENT_ID];
-                    patient.FirstName = row[Table.FIRST_NAME].ToString();
-                    patient.LastName = row[Table.LAST_NAME].ToString();
-                    patient.Email = row[Table.EMAIL].ToString();
-                    patient.HasAuthorized = (bool)row[Table.HAS_AUTHORIZED];
-                    patient.HVPatientID = Guid.Parse(row[Table.HV_PATIENT_ID].ToString());
-                    patient.HVRecordID = Guid.Parse(row[Table.HV_RECORD_ID].ToString());
-                    patient.HVParticipantCode = Guid.Parse(row[Table.HV_PARTICIPANT_CODE].ToString());
-
-                    patientList.Add(patient);
-                }
-                dataTable.Dispose();
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
             }
         }
+    }
+
+    private static ICollection<Patient> PatientCollectionFromDataTable(DataTable dataTable)
+    {
+        List<Patient> patientList = new List<Patient>();
+        foreach (DataRow row in dataTable.Rows)
+        {
+            Patient patient = PatientFromRow(row);
+            patientList.Add(patient);
+        }
         return patientList;
+    }
+
+    private static Patient PatientFromRow(DataRow row)
+    {
+        Patient patient = new Patient();
+        patient.ID = (int)row[Table.PATIENT_ID];
+        patient.FirstName = row[Table.FIRST_NAME].ToString();
+        patient.LastName = row[Table.LAST_NAME].ToString();
+        patient.Email = row[Table.EMAIL].ToString();
+        patient.HasAuthorized = (bool)row[Table.HAS_AUTHORIZED];
+        patient.HVPatientID = Guid.Parse(row[Table.HV_PATIENT_ID].ToString());
+        patient.HVRecordID = Guid.Parse(row[Table.HV_RECORD_ID].ToString());
+        patient.HVParticipantCode = Guid.Parse(row[Table.HV_PARTICIPANT_CODE].ToString());
+        return patient;
     }
 }
