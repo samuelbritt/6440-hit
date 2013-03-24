@@ -16,26 +16,26 @@
         <asp:ValidationSummary ID="ValidationSummary" runat="server" ValidationGroup="enroll" HeaderText="There were errors on the page:" />
         <label id="enrollLabel">
             Enroll New Participant</label>
-        <asp:Label ID="PatientFirstNameLabel" Text="First Name:" AssociatedControlID="PatientFirstNameTextBox"
+        <asp:Label ID="ParticipantFirstNameLabel" Text="First Name:" AssociatedControlID="ParticipantFirstNameTextBox"
             runat="server">
-            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="PatientFirstNameTextBox"
+            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ParticipantFirstNameTextBox"
                 ValidationGroup="enroll" ErrorMessage="First name is required."> *
             </asp:RequiredFieldValidator>
-            <asp:TextBox ID="PatientFirstNameTextBox" runat="server" ValidationGroup="enroll" />
+            <asp:TextBox ID="ParticipantFirstNameTextBox" runat="server" ValidationGroup="enroll" />
         </asp:Label>
-        <asp:Label ID="PatientLastNameLabel" Text="Last Name:" AssociatedControlID="PatientLastNameTextBox"
+        <asp:Label ID="ParticipantLastNameLabel" Text="Last Name:" AssociatedControlID="ParticipantLastNameTextBox"
             runat="server">
-            <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="PatientLastNameTextBox"
+            <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ParticipantLastNameTextBox"
                 ValidationGroup="enroll" ErrorMessage="Last name is required."> *
             </asp:RequiredFieldValidator>
-            <asp:TextBox ID="PatientLastNameTextBox" runat="server" ValidationGroup="enroll" />
+            <asp:TextBox ID="ParticipantLastNameTextBox" runat="server" ValidationGroup="enroll" />
         </asp:Label>
-        <asp:Label ID="PatientEmailLabel" Text="Email:" AssociatedControlID="PatientEmailTextBox"
+        <asp:Label ID="ParticipantEmailLabel" Text="Email:" AssociatedControlID="ParticipantEmailTextBox"
             runat="server">
-            <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="PatientEmailTextBox"
+            <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="ParticipantEmailTextBox"
                 ValidationGroup="enroll" ErrorMessage="Email is required."> *
             </asp:RequiredFieldValidator>
-            <asp:TextBox ID="PatientEmailTextBox" runat="server" ValidationGroup="enroll" />
+            <asp:TextBox ID="ParticipantEmailTextBox" runat="server" ValidationGroup="enroll" />
         </asp:Label>
         <asp:Label ID="SecurityQuestionLabel" Text="Security Question:" AssociatedControlID="SecurityQuestionTextBox"
             runat="server">

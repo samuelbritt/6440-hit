@@ -12,20 +12,20 @@ using System.Data.Common;
 /// Data Access Object---handles all connections and queries to database.
 /// Methods take data transfer objects as parameters and return them as outputs.
 /// </summary>
-public class PatientDAO
+public class ParticipantDAO
 {
     /// <summary>
     /// Constants for the table name and column names
     /// </summary>
     private static class Table
     {
-        public static string TABLE_NAME = "Patient";
+        public static string TABLE_NAME = "Participant";
         // Table column names
-        public static string PATIENT_ID = "PatientID";
+        public static string PARTICIPANT_ID = "ParticipantID";
         public static string FIRST_NAME = "FirstName";
         public static string LAST_NAME = "LastName";
         public static string EMAIL = "Email";
-        public static string HV_PATIENT_ID = "HVPatientID";
+        public static string HV_PERSON_ID = "HVPersonID";
         public static string HV_RECORD_ID = "HVRecordID";
         public static string HV_PARTICIPANT_CODE = "HVParticipantCode";
         public static string SECURITY_QUESTION = "SecurityQuestion";
@@ -33,16 +33,16 @@ public class PatientDAO
         public static string HAS_AUTHORIZED = "HasAuthorized";
     }
 
-    public PatientDAO()
+    public ParticipantDAO()
     {
     }
 
     /// <summary>
-    /// Inserts a new patient into the database.
+    /// Inserts a new participant into the database.
     /// </summary>
-    /// <param name="patient">A new patient, with appropriate fields filled out</param>
-    /// <returns>The PatientID of the newly inserted patient.</returns>
-    public int InsertPatient(Patient patient)
+    /// <param name="participant">A new participant, with appropriate fields filled out</param>
+    /// <returns>The ID of the newly inserted participant.</returns>
+    public int InsertParticipant(Participant participant)
     {
         String query =
             String.Format("INSERT INTO {0} ({1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}) ",
@@ -50,7 +50,7 @@ public class PatientDAO
                           Table.FIRST_NAME,
                           Table.LAST_NAME,
                           Table.EMAIL,
-                          Table.HV_PATIENT_ID,
+                          Table.HV_PERSON_ID,
                           Table.HV_RECORD_ID,
                           Table.HV_PARTICIPANT_CODE,
                           Table.SECURITY_QUESTION,
@@ -61,7 +61,7 @@ public class PatientDAO
                             "@firstName",
                             "@lastName",
                             "@email",
-                            "@HVPatientID",
+                            "@HVPersonID",
                             "@HVRecordID",
                             "@HVParticipantCode",
                             "@securityQuestion",
@@ -71,15 +71,15 @@ public class PatientDAO
               + "SELECT CAST(scope_identity() AS int)"; // returns the last value of the autoincrement column
 
         SqlCommand command = new SqlCommand(query);
-        command.Parameters.AddWithValue("@firstName", patient.FirstName);
-        command.Parameters.AddWithValue("@lastName", patient.LastName);
-        command.Parameters.AddWithValue("@email", patient.Email);
-        command.Parameters.AddWithValue("@HVPatientID", patient.HVPatientID);
-        command.Parameters.AddWithValue("@HVRecordID", patient.HVRecordID);
-        command.Parameters.AddWithValue("@HVParticipantCode", patient.HVParticipantCode);
-        command.Parameters.AddWithValue("@securityQuestion", patient.SecurityQuestion);
-        command.Parameters.AddWithValue("@securityAnswer", patient.SecurityAnswer);
-        command.Parameters.AddWithValue("@hasAuthorized", patient.HasAuthorized);
+        command.Parameters.AddWithValue("@firstName", participant.FirstName);
+        command.Parameters.AddWithValue("@lastName", participant.LastName);
+        command.Parameters.AddWithValue("@email", participant.Email);
+        command.Parameters.AddWithValue("@HVPersonID", participant.HVPersonID);
+        command.Parameters.AddWithValue("@HVRecordID", participant.HVRecordID);
+        command.Parameters.AddWithValue("@HVParticipantCode", participant.HVParticipantCode);
+        command.Parameters.AddWithValue("@securityQuestion", participant.SecurityQuestion);
+        command.Parameters.AddWithValue("@securityAnswer", participant.SecurityAnswer);
+        command.Parameters.AddWithValue("@hasAuthorized", participant.HasAuthorized);
 
         int newID = ExecuteScalar(command);
         return newID;
@@ -110,19 +110,19 @@ public class PatientDAO
     }
 
     /// <summary>
-    /// Gets all patients that have authorized the application.
+    /// Gets all participants that have authorized the application.
     /// </summary>
-    /// <returns>List of authorized Patient objects</returns>
-    public ICollection<Patient> getAuthorizedPatients()
+    /// <returns>List of authorized Participant objects</returns>
+    public ICollection<Participant> getAuthorizedParticipants()
     {
         string query = String.Format("SELECT * FROM {0} WHERE {1}=1 ORDER BY {2}",
                                      Table.TABLE_NAME, Table.HAS_AUTHORIZED, Table.LAST_NAME);
         SqlCommand command = new SqlCommand(query);
         DataTable dataTable = new DataTable();
         ExecuteFillDataTable(command, dataTable);
-        ICollection<Patient> patientList = PatientCollectionFromDataTable(dataTable);
+        ICollection<Participant> participantList = ParticipantCollectionFromDataTable(dataTable);
         dataTable.Dispose();
-        return patientList;
+        return participantList;
     }
 
     /// <summary>
@@ -149,37 +149,37 @@ public class PatientDAO
     }
 
     /// <summary>
-    /// Returns a list of Patient objects, one for each row in the DataTable
+    /// Returns a list of Participant objects, one for each row in the DataTable
     /// </summary>
-    /// <param name="dataTable">Table where each row represnts a Patient.</param>
-    /// <returns>List of Patient objects, one for each row in the DataTable</returns>
-    private static ICollection<Patient> PatientCollectionFromDataTable(DataTable dataTable)
+    /// <param name="dataTable">Table where each row represnts a Participant.</param>
+    /// <returns>List of Participant objects, one for each row in the DataTable</returns>
+    private static ICollection<Participant> ParticipantCollectionFromDataTable(DataTable dataTable)
     {
-        List<Patient> patientList = new List<Patient>();
+        List<Participant> participantList = new List<Participant>();
         foreach (DataRow row in dataTable.Rows)
         {
-            Patient patient = PatientFromRow(row);
-            patientList.Add(patient);
+            Participant participant = ParticipantFromRow(row);
+            participantList.Add(participant);
         }
-        return patientList;
+        return participantList;
     }
 
     /// <summary>
-    /// Given a DataRow representing a patient, returns a corresponding Patient DTO
+    /// Given a DataRow representing a participant, returns a corresponding Participant DTO
     /// </summary>
-    /// <param name="row">Row representing a patient</param>
-    /// <returns>a corresponding Patient DTO</returns>
-    private static Patient PatientFromRow(DataRow row)
+    /// <param name="row">Row representing a participant</param>
+    /// <returns>a corresponding Participant DTO</returns>
+    private static Participant ParticipantFromRow(DataRow row)
     {
-        Patient patient = new Patient();
-        patient.ID = (int)row[Table.PATIENT_ID];
-        patient.FirstName = row[Table.FIRST_NAME].ToString();
-        patient.LastName = row[Table.LAST_NAME].ToString();
-        patient.Email = row[Table.EMAIL].ToString();
-        patient.HasAuthorized = (bool)row[Table.HAS_AUTHORIZED];
-        patient.HVPatientID = Guid.Parse(row[Table.HV_PATIENT_ID].ToString());
-        patient.HVRecordID = Guid.Parse(row[Table.HV_RECORD_ID].ToString());
-        patient.HVParticipantCode = Guid.Parse(row[Table.HV_PARTICIPANT_CODE].ToString());
-        return patient;
+        Participant participant = new Participant();
+        participant.ID = (int)row[Table.PARTICIPANT_ID];
+        participant.FirstName = row[Table.FIRST_NAME].ToString();
+        participant.LastName = row[Table.LAST_NAME].ToString();
+        participant.Email = row[Table.EMAIL].ToString();
+        participant.HasAuthorized = (bool)row[Table.HAS_AUTHORIZED];
+        participant.HVPersonID = Guid.Parse(row[Table.HV_PERSON_ID].ToString());
+        participant.HVRecordID = Guid.Parse(row[Table.HV_RECORD_ID].ToString());
+        participant.HVParticipantCode = Guid.Parse(row[Table.HV_PARTICIPANT_CODE].ToString());
+        return participant;
     }
 }

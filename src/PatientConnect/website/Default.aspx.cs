@@ -50,10 +50,10 @@ public partial class Default : System.Web.UI.Page
 
     private void bindAuthorizedParticipantsListBox()
     {
-        PatientDAO dao = new PatientDAO();
-        ICollection<Patient> patientList = dao.getAuthorizedPatients();
+        ParticipantDAO dao = new ParticipantDAO();
+        ICollection<Participant> participantList = dao.getAuthorizedParticipants();
 
-        AuthParticipantsListBox.DataSource = patientList;
+        AuthParticipantsListBox.DataSource = participantList;
         AuthParticipantsListBox.DataTextField = "FullName";
         AuthParticipantsListBox.DataValueField = "ID";
         AuthParticipantsListBox.DataBind();
@@ -64,9 +64,9 @@ public partial class Default : System.Web.UI.Page
         if (!IsValid)
             return;
 
-        String firstName = PatientFirstNameTextBox.Text;
-        String lastName = PatientLastNameTextBox.Text;
-        String email = PatientEmailTextBox.Text;
+        String firstName = ParticipantFirstNameTextBox.Text;
+        String lastName = ParticipantLastNameTextBox.Text;
+        String email = ParticipantEmailTextBox.Text;
         String securityQuestion = SecurityQuestionTextBox.Text;
         String securityAnswer = SecurityAnswerTextBox.Text;
 
@@ -77,16 +77,16 @@ public partial class Default : System.Web.UI.Page
     private void enrollNewParticipant(string firstName, string lastName, string email,
                                       string securityQuestion, string securityAnswer)
     {
-        Patient patient = new Patient();
-        patient.FirstName = firstName;
-        patient.LastName = lastName;
-        patient.Email = email;
-        patient.SecurityQuestion = securityQuestion;
-        patient.SecurityAnswer = securityAnswer;
-        patient.HasAuthorized = false;
+        Participant participant = new Participant();
+        participant.FirstName = firstName;
+        participant.LastName = lastName;
+        participant.Email = email;
+        participant.SecurityQuestion = securityQuestion;
+        participant.SecurityAnswer = securityAnswer;
+        participant.HasAuthorized = false;
 
-        PatientDAO dao = new PatientDAO();
-        patient.ID = dao.InsertPatient(patient);
+        ParticipantDAO dao = new ParticipantDAO();
+        participant.ID = dao.InsertParticipant(participant);
     }
 
     protected void btnCheckAuth_Click(object sender, EventArgs e)
