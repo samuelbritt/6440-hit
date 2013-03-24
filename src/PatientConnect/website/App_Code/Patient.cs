@@ -4,7 +4,8 @@ using System.Linq;
 using System.Web;
 
 /// <summary>
-/// Summary description for Patient
+/// Data Transfer Object for the Patient table. A plain old data object useful
+/// for logic layers.
 /// </summary>
 public class Patient
 {

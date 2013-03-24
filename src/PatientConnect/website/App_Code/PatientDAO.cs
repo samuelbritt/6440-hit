@@ -9,10 +9,14 @@ using System.Data;
 using System.Data.Common;
 
 /// <summary>
-/// Summary description for PatientDAO
+/// Data Access Object---handles all connections and queries to database.
+/// Methods take data transfer objects as parameters and return them as outputs.
 /// </summary>
 public class PatientDAO
 {
+    /// <summary>
+    /// Constants for the table name and column names
+    /// </summary>
     private static class Table
     {
         public static string TABLE_NAME = "Patient";
@@ -81,6 +85,11 @@ public class PatientDAO
         return newID;
     }
 
+    /// <summary>
+    /// Runs the <paramref name="comand"/>'s ExecuteScalar method and returns the result.
+    /// </summary>
+    /// <param name="command">Command to execute. Should result in a SELECT.</param>
+    /// <returns>Scalar (first column) result of <paramref name="command"/></returns>
     private static int ExecuteScalar(SqlCommand command)
     {
         int result = 0;
@@ -116,6 +125,11 @@ public class PatientDAO
         return patientList;
     }
 
+    /// <summary>
+    /// Fills the DataTable with the result of the command
+    /// </summary>
+    /// <param name="command">Command to run. Should resutl in a SELECT.</param>
+    /// <param name="dataTable">DataTable to fill</param>
     private static void ExecuteFillDataTable(SqlCommand command, DataTable dataTable)
     {
         using (SqlConnection conn = Database.NewConnection())
@@ -134,6 +148,11 @@ public class PatientDAO
         }
     }
 
+    /// <summary>
+    /// Returns a list of Patient objects, one for each row in the DataTable
+    /// </summary>
+    /// <param name="dataTable">Table where each row represnts a Patient.</param>
+    /// <returns>List of Patient objects, one for each row in the DataTable</returns>
     private static ICollection<Patient> PatientCollectionFromDataTable(DataTable dataTable)
     {
         List<Patient> patientList = new List<Patient>();
@@ -145,6 +164,11 @@ public class PatientDAO
         return patientList;
     }
 
+    /// <summary>
+    /// Given a DataRow representing a patient, returns a corresponding Patient DTO
+    /// </summary>
+    /// <param name="row">Row representing a patient</param>
+    /// <returns>a corresponding Patient DTO</returns>
     private static Patient PatientFromRow(DataRow row)
     {
         Patient patient = new Patient();
