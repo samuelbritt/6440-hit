@@ -14,8 +14,39 @@ public partial class Default : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        LastUpdateLabel.Text = getLastAuthUpdate();
-        bindAuthorizedParticipantsListBox();
+        if (!IsPostBack)
+        {
+            LastUpdateLabel.Text = getLastAuthUpdate();
+            bindAuthorizedParticipantsListBox();
+        }
+    }
+
+    /// <summary>
+    /// clear all textboxes
+    /// </summary>
+    private void ClearTextBoxes()
+    {
+        foreach (Control ctrl in Page.Controls)
+        {
+            ClearChildControl(ctrl);
+        }
+    }
+
+    /// <summary>
+    /// Recursively clear textbox controls
+    /// </summary>
+    /// <param name="control"></param>
+    private void ClearChildControl(Control control)
+    {
+        foreach (Control ctrl in control.Controls)
+        {
+            Debug.WriteLine(ctrl);
+            if (ctrl is TextBox)
+            {
+                ((TextBox)ctrl).Text = String.Empty;
+            }
+            ClearChildControl(ctrl);
+        }
     }
 
     private void bindAuthorizedParticipantsListBox()
@@ -38,6 +69,7 @@ public partial class Default : System.Web.UI.Page
         String securityQuestion = SecurityQuestionTextBox.Text;
         String securityAnswer = SecurityAnswerTextBox.Text;
         enrollNewParticipant(firstName, lastName, email, securityQuestion, securityAnswer);
+        ClearTextBoxes();
     }
 
     private void enrollNewParticipant(string firstName, string lastName, string email,
@@ -49,7 +81,7 @@ public partial class Default : System.Web.UI.Page
         patient.Email = email;
         patient.SecurityQuestion = securityQuestion;
         patient.SecurityAnswer = securityAnswer;
-        patient.HasAuthorized = true;
+        patient.HasAuthorized = false;
 
         PatientDAO dao = new PatientDAO();
         patient.ID = dao.InsertPatient(patient);

@@ -5,7 +5,7 @@
     <div id="authParticipantsList">
         <label for="ListBoxAuthParticipants">
             Authorized Participants</label>
-        <asp:ListBox ID="AuthParticipantsListBox" runat="server" OnSelectedIndexChanged="AuthParticipantsListBox_SelectedIndexChanged">
+        <asp:ListBox ID="AuthParticipantsListBox" runat="server" Rows=10>
         </asp:ListBox>
         <asp:Button ID="CheckAuthButton" runat="server" Text="Check New Authorizations" OnClick="btnCheckAuth_Click" />
         <span id="lastUpdate"><span>Last Update: </span>
