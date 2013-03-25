@@ -84,13 +84,16 @@ public partial class Default : System.Web.UI.Page
         participant.SecurityQuestion = securityQuestion;
         participant.SecurityAnswer = securityAnswer;
 
-        ParticipantEnroller.EnrollNewParticipant(participant);
+        ParticipantEnroller enroller = new ParticipantEnroller();
+        enroller.EnrollNewParticipant(participant);
     }
 
     protected void btnCheckAuth_Click(object sender, EventArgs e)
     {
-        bindAuthorizedParticipantsListBox();
+        ParticipantEnroller enroller = new ParticipantEnroller();
+        enroller.UpdateAuthorizedParticipants();
         setLastAuthUpdate(DateTime.Now);
+        bindAuthorizedParticipantsListBox();
         LastUpdateLabel.Text = getLastAuthUpdate();
     }
 

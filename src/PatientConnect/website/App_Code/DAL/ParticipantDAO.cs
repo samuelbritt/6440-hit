@@ -113,6 +113,19 @@ public class ParticipantDAO
         }
     }
 
+    public static Participant FindParticipantById(int id)
+    {
+        string query = String.Format("SELECT * FROM {0} WHERE {1}={2}",
+            Table.TABLE_NAME, Table.PARTICIPANT_ID, Params.PARTICIPANT_ID);
+        SqlCommand command = new SqlCommand(query);
+        command.Parameters.AddWithValue(Params.PARTICIPANT_ID, id);
+        DataTable dataTable = new DataTable();
+        ExecuteFillDataTable(command, dataTable);
+        Participant p = ParticipantFromRow(dataTable.Rows[0]);
+        dataTable.Dispose();
+        return p;
+    }
+
     /// <summary>
     /// Gets all participants that have authorized the application.
     /// </summary>
@@ -120,7 +133,7 @@ public class ParticipantDAO
     public ICollection<Participant> getAuthorizedParticipants()
     {
         string query = String.Format("SELECT * FROM {0} WHERE {1}=1 ORDER BY {2}",
-                                     Table.TABLE_NAME, Table.HAS_AUTHORIZED, Table.LAST_NAME);
+            Table.TABLE_NAME, Table.HAS_AUTHORIZED, Table.LAST_NAME);
         SqlCommand command = new SqlCommand(query);
         DataTable dataTable = new DataTable();
         ExecuteFillDataTable(command, dataTable);
@@ -252,6 +265,9 @@ public class ParticipantDAO
         participant.HVPersonID = Guid.Parse(row[Table.HV_PERSON_ID].ToString());
         participant.HVRecordID = Guid.Parse(row[Table.HV_RECORD_ID].ToString());
         participant.HVParticipantCode = row[Table.HV_PARTICIPANT_CODE].ToString();
+        participant.SecurityQuestion = row[Table.SECURITY_QUESTION].ToString();
+        participant.SecurityAnswer = row[Table.SECURITY_ANSWER].ToString();
+        participant.HasAuthorized = (bool)row[Table.HAS_AUTHORIZED];
         return participant;
     }
 }
