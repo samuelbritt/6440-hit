@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 /// <summary>
 /// Data Transfer Object for the Participant table. A plain old data object useful
@@ -15,7 +12,7 @@ public class Participant
     public string Email { get; set; }
     public Guid HVPersonID { get; set; }
     public Guid HVRecordID { get; set; }
-    public Guid HVParticipantCode { get; set; }
+    public string HVParticipantCode { get; set; }
     public string SecurityQuestion { get; set; }
     public string SecurityAnswer { get; set; }
     public bool HasAuthorized { get; set; }
@@ -30,5 +27,8 @@ public class Participant
 
     public Participant()
     {
+        HVPersonID = Guid.Empty;
+        HVRecordID = Guid.Empty;
+        HVParticipantCode = String.Empty;
     }
 }
