@@ -83,10 +83,8 @@ public partial class Default : System.Web.UI.Page
         participant.Email = email;
         participant.SecurityQuestion = securityQuestion;
         participant.SecurityAnswer = securityAnswer;
-        participant.HasAuthorized = false;
 
-        ParticipantDAO dao = new ParticipantDAO();
-        participant.ID = dao.InsertParticipant(participant);
+        ParticipantEnroller.EnrollNewParticipant(participant);
     }
 
     protected void btnCheckAuth_Click(object sender, EventArgs e)
