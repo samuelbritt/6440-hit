@@ -18,6 +18,11 @@ public class ParticipantEnroller
         ParticipantDAO = new ParticipantDAO();
     }
 
+    /// <summary>
+    /// Enrolls a new participant with HealthVault; that is, gets a participant code
+    /// and sends the enrolment email.
+    /// </summary>
+    /// <param name="participant">New participant to enroll</param>
     public void EnrollNewParticipant(Participant participant)
     {
         participant.HasAuthorized = false;
@@ -48,6 +53,9 @@ public class ParticipantEnroller
         Debug.WriteLine(msg);
     }
 
+    /// <summary>
+    /// Updates the database with the newly authenticated participants.
+    /// </summary>
     public void UpdateAuthorizedParticipants()
     {
         // TODO: only check since the last update
