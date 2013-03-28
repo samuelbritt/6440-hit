@@ -64,7 +64,7 @@ public class ParticipantEnroller
         {
             int participantId = int.Parse(validatedPatient.ApplicationPatientId);
             Participant participant = ParticipantDAO.FindParticipantById(participantId);
-            if (participant.HasAuthorized)
+            if (participant == null || participant.HasAuthorized)
                 continue;
 
             participant.HVPersonID = validatedPatient.PersonId;

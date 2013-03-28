@@ -113,7 +113,7 @@ public class ParticipantDAO
         }
     }
 
-    public static Participant FindParticipantById(int id)
+    public Participant FindParticipantById(int id)
     {
         string query = String.Format("SELECT * FROM {0} WHERE {1}={2}",
             Table.TABLE_NAME, Table.PARTICIPANT_ID, Params.PARTICIPANT_ID);
@@ -121,7 +121,11 @@ public class ParticipantDAO
         command.Parameters.AddWithValue(Params.PARTICIPANT_ID, id);
         DataTable dataTable = new DataTable();
         ExecuteFillDataTable(command, dataTable);
-        Participant p = ParticipantFromRow(dataTable.Rows[0]);
+        Participant p = null;
+        if (dataTable.Rows.Count > 0)
+        {
+            p = ParticipantFromRow(dataTable.Rows[0]);
+        }
         dataTable.Dispose();
         return p;
     }
