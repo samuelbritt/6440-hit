@@ -23,8 +23,13 @@ namespace HealthVaultHelper
         public string GetParticipantCode(Participant participant)
         {
             OfflineWebApplicationConnection conn = HVConnectionManager.CreateConnection();
-            string participantCode = PatientConnection.Create(conn, participant.FirstName, participant.SecurityQuestion,
-                participant.SecurityAnswer, null, participant.ID.ToString());
+            
+
+            
+                string participantCode = PatientConnection.Create(conn, participant.FirstName, participant.SecurityQuestion,
+                   participant.SecurityAnswer, null, participant.ID.ToString());
+            
+            
             return participantCode;
         }
 

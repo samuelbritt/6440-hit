@@ -4,6 +4,9 @@ using System;
 using Microsoft.Health.PatientConnect;
 using System.Collections.ObjectModel;
 
+
+
+
 /// <summary>
 /// Summary description for ParticipantEnroller
 /// </summary>
@@ -44,12 +47,18 @@ public class ParticipantEnroller
     /// <param name="participant">Participant to enroll</param>
     private void SendEnrollmentEmail(Participant participant)
     {
+        Debug.WriteLine("Arriba");
         // TODO: actually send an email
+        mysendemail.HotmailEmail em = new mysendemail.HotmailEmail();
+        
+
+
         if (String.IsNullOrEmpty(participant.Email))
             throw new Exception("Invalid email");
 
         string targetUrl = HvEnroller.BuildTargetEnrollmentUrl(participant);
         string msg = String.Format("Send email to {0} with link to {1}", participant.Email, targetUrl);
+        em.Sender(msg);
         Debug.WriteLine(msg);
     }
 
@@ -74,3 +83,4 @@ public class ParticipantEnroller
         }
     }
 }
+
