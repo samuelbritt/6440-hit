@@ -12,9 +12,9 @@
             <asp:Label ID="LastUpdateLabel" CssClass="LastUpdateLabel" runat="server" Text="-"></asp:Label>
         </span>
     </div>
-    <div id="enrollNewParticipant">
+    <div id="enrollNewParticipant" class="vertical-inputs">
         <asp:ValidationSummary ID="ValidationSummary" runat="server" ValidationGroup="enroll" HeaderText="There were errors on the page:" />
-        <label id="enrollLabel">
+        <label id="enrollLabel" class="header">
             Enroll New Participant</label>
         <asp:Label ID="ParticipantFirstNameLabel" Text="First Name:" AssociatedControlID="ParticipantFirstNameTextBox"
             runat="server">
