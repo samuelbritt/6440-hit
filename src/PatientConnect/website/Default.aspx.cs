@@ -16,8 +16,8 @@ public partial class Default : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
-            LastUpdateLabel.Text = getLastAuthUpdate();
-            bindAuthorizedParticipantsListBox();
+            lblLastUpdateDate.Text = getLastAuthUpdate();
+            bindLstAuthorizedParticipants();
         }
     }
 
@@ -48,15 +48,15 @@ public partial class Default : System.Web.UI.Page
         }
     }
 
-    private void bindAuthorizedParticipantsListBox()
+    private void bindLstAuthorizedParticipants()
     {
         ParticipantDAO dao = new ParticipantDAO();
         ICollection<Participant> participantList = dao.getAuthorizedParticipants();
 
-        AuthParticipantsListBox.DataSource = participantList;
-        AuthParticipantsListBox.DataTextField = "FullName";
-        AuthParticipantsListBox.DataValueField = "ID";
-        AuthParticipantsListBox.DataBind();
+        lstAuthParticipants.DataSource = participantList;
+        lstAuthParticipants.DataTextField = "FullName";
+        lstAuthParticipants.DataValueField = "ID";
+        lstAuthParticipants.DataBind();
     }
 
     protected void btnEnroll_Click(object sender, EventArgs e)
@@ -64,11 +64,11 @@ public partial class Default : System.Web.UI.Page
         if (!IsValid)
             return;
 
-        String firstName = ParticipantFirstNameTextBox.Text;
-        String lastName = ParticipantLastNameTextBox.Text;
-        String email = ParticipantEmailTextBox.Text;
-        String securityQuestion = SecurityQuestionTextBox.Text;
-        String securityAnswer = SecurityAnswerTextBox.Text;
+        String firstName = txtParticipantFirstName.Text;
+        String lastName = txtParticipantLastName.Text;
+        String email = txtParticipantEmail.Text;
+        String securityQuestion = txtSecurityQuestion.Text;
+        String securityAnswer = txtSecurityAnswer.Text;
 
         enrollNewParticipant(firstName, lastName, email, securityQuestion, securityAnswer);
         ClearTextBoxes();
@@ -93,8 +93,8 @@ public partial class Default : System.Web.UI.Page
         ParticipantEnroller enroller = new ParticipantEnroller();
         enroller.UpdateAuthorizedParticipants();
         setLastAuthUpdate(DateTime.Now);
-        bindAuthorizedParticipantsListBox();
-        LastUpdateLabel.Text = getLastAuthUpdate();
+        bindLstAuthorizedParticipants();
+        lblLastUpdateDate.Text = getLastAuthUpdate();
     }
 
     private String getLastAuthUpdate()
