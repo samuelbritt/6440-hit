@@ -1,46 +1,53 @@
-﻿body
+﻿.form
 {
+    margin: 20px;
+    padding: 10px 20px;
 }
 
-#authParticipantsList
+.form ol
 {
-    display: inline-block;
-    vertical-align: top;
-}
-
-#authParticipantsList select
-{
-    display: block;
-    width: 350px;
-}
-
-#authParticipantsList #lastUpdate
-{
-    display: block;
-    padding-top: .2em;
-}
-
-.vertical-inputs
-{
-    display: inline-block;
-    vertical-align: top;
-    margin-left: 1em;
-}
-
-.vertical-inputs .header
-{
-    text-align: left;
+    list-style: none;
+    margin: 0;
     padding: 0;
 }
 
-.vertical-inputs label
+.form li, .form p
 {
-    display: block;
-    text-align: right;
-    padding-top: 1.5em;
+    padding: 6px;
+    margin-bottom: 1px;
 }
 
-.vertical-inputs input[type="text"]
+.form label
 {
-    margin-left: .5em;
+    float: left;
+    width: 120px;
+    text-align: right;
+    margin-right: 7px;
+    line-height: 30px; /* This will make the labels vertically centered with the inputs */
+}
+
+.form input, .form textarea, .form select
+{
+    padding: 4px;
+    border: 1px solid #999999;
+    width: 200px;
+}
+
+.form input:focus, .form textarea:focus
+{
+    border: 1px solid #666;
+    background: #e3f1f1;
+}
+
+
+.form input.submit
+{
+    margin-top: 6px;
+    width: 150px;
+}
+
+#authParticipantsList, #enrollNewParticipant
+{
+    display:inline-block;
+    vertical-align:text-top;
 }
