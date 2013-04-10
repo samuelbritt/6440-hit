@@ -13,7 +13,7 @@ public partial class pcp : System.Web.UI.Page
         if ((new PcpLogin()).LoginIsValid(email, password))
         {
             lblMessage.Text = "Valid Login";
-            Response.Redirect("pcp-dashboard.aspx");
+            Response.Redirect("Dashboard.aspx");
         }
         else
         {

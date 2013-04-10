@@ -1,5 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true"
-    CodeFile="pcp.aspx.cs" Inherits="pcp" %>
+    CodeFile="Default.aspx.cs" Inherits="pcp" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="body" runat="Server">
     <div id="pcpLogin" class="form">
