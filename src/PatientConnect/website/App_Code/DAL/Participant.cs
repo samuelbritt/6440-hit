@@ -6,7 +6,7 @@
 /// </summary>
 public class Participant
 {
-    public int ID { get; set; }
+    public Guid ID { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Email { get; set; }
@@ -27,6 +27,7 @@ public class Participant
 
     public Participant()
     {
+        ID = Guid.Empty;
         HVPersonID = Guid.Empty;
         HVRecordID = Guid.Empty;
         HVParticipantCode = String.Empty;

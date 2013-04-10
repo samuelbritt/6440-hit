@@ -28,8 +28,9 @@ public class ParticipantDAO
         public static string SECURITY_QUESTION = "SecurityQuestion";
         public static string SECURITY_ANSWER = "SecurityAnswer";
         public static string HAS_AUTHORIZED = "HasAuthorized";
-        public static string ALL_COLUMNS_EXCEPT_ID = String.Format(
-            "{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}",
+        public static string ALL_COLUMNS = String.Format(
+            "{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}",
+            PARTICIPANT_ID,
             FIRST_NAME,
             LAST_NAME,
             EMAIL,
@@ -56,8 +57,9 @@ public class ParticipantDAO
         public static string SECURITY_QUESTION = "@SecurityQuestion";
         public static string SECURITY_ANSWER = "@SecurityAnswer";
         public static string HAS_AUTHORIZED = "@HasAuthorized";
-        public static string ALL_COLUMNS_EXCEPT_ID = String.Format(
-            "{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}",
+        public static string ALL_COLUMNS = String.Format(
+            "{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}",
+            PARTICIPANT_ID,
             FIRST_NAME,
             LAST_NAME,
             EMAIL,
@@ -78,15 +80,20 @@ public class ParticipantDAO
     /// </summary>
     /// <param name="participant">A new participant, with appropriate fields filled out</param>
     /// <returns>The ID of the newly inserted participant.</returns>
-    public int InsertParticipant(Participant participant)
+    public Guid InsertParticipant(Participant participant)
     {
-        String query = String.Format("INSERT INTO {0} ({1}) ", Table.TABLE_NAME, Table.ALL_COLUMNS_EXCEPT_ID)
-            + String.Format("VALUES ({0});", Params.ALL_COLUMNS_EXCEPT_ID)
-            + "SELECT CAST(scope_identity() AS int)"; // returns the last value of the autoincrement column
+        String query = String.Format("INSERT INTO {0} ({1}) ", Table.TABLE_NAME, Table.ALL_COLUMNS)
+            + String.Format("VALUES ({0});", Params.ALL_COLUMNS);
 
+        Guid newID = Guid.NewGuid();
+        participant.ID = newID;
         SqlCommand command = new SqlCommand(query);
-        AddAllParamsExceptIDToCommand(command, participant);
-        int newID = ExecuteScalar(command);
+        AddAllParamsToCommand(command, participant);
+        int rowsAffected = ExecuteNonQuery(command);
+        if (rowsAffected < 1)
+        {
+            Debug.WriteLine("Error inserting Participant");
+        }
         return newID;
     }
 
@@ -113,7 +120,7 @@ public class ParticipantDAO
         }
     }
 
-    public Participant FindParticipantById(int id)
+    public Participant FindParticipantById(Guid id)
     {
         string query = String.Format("SELECT * FROM {0} WHERE {1}={2}",
             Table.TABLE_NAME, Table.PARTICIPANT_ID, Params.PARTICIPANT_ID);
@@ -261,7 +268,7 @@ public class ParticipantDAO
     private static Participant ParticipantFromRow(DataRow row)
     {
         Participant participant = new Participant();
-        participant.ID = (int)row[Table.PARTICIPANT_ID];
+        participant.ID = Guid.Parse(row[Table.PARTICIPANT_ID].ToString());
         participant.FirstName = row[Table.FIRST_NAME].ToString();
         participant.LastName = row[Table.LAST_NAME].ToString();
         participant.Email = row[Table.EMAIL].ToString();

@@ -5,8 +5,6 @@ using Microsoft.Health.PatientConnect;
 using System.Collections.ObjectModel;
 
 
-
-
 /// <summary>
 /// Summary description for ParticipantEnroller
 /// </summary>
@@ -71,8 +69,7 @@ public class ParticipantEnroller
         Collection<ValidatedPatientConnection> patientConnections = HvEnroller.GetAuthorizedParticipants(0);
         foreach (var validatedPatient in patientConnections)
         {
-            int participantId = int.Parse(validatedPatient.ApplicationPatientId);
-            Participant participant = ParticipantDAO.FindParticipantById(participantId);
+            Participant participant = ValidatedPatientConnectionToParticipant(validatedPatient);
             if (participant == null || participant.HasAuthorized)
                 continue;
 
@@ -81,6 +78,27 @@ public class ParticipantEnroller
             participant.HasAuthorized = true;
             ParticipantDAO.UpdateParticipant(participant);
         }
+    }
+
+    /// <summary>
+    /// Converts a HV Validated Patient Connection to a Participant
+    /// </summary>
+    /// <param name="validatedPatient">The ValidatedPatientConnection from healthvault</param>
+    /// <returns>The corresponding Participant from the database, or null it can't find one</returns>
+    private Participant ValidatedPatientConnectionToParticipant(ValidatedPatientConnection validatedPatient)
+    {
+        Guid participantId = Guid.Empty;
+        try
+        {
+            participantId = Guid.Parse(validatedPatient.ApplicationPatientId);
+        }
+        catch (FormatException e)
+        {
+            // old integer-style key; ignore
+            return null;
+        }
+
+        return ParticipantDAO.FindParticipantById(participantId);
     }
 }
 
