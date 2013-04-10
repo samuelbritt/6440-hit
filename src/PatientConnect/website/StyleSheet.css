@@ -46,7 +46,7 @@
     width: 150px;
 }
 
-#authParticipantsList, #enrollNewParticipant
+#frmAuthParticipantsList, #frmEnrollNewParticipant
 {
     display:inline-block;
     vertical-align:text-top;
