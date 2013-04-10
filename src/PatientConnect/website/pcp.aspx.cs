@@ -10,7 +10,7 @@ public partial class pcp : System.Web.UI.Page
     {
         string email = txtUsername.Text;
         string password = txtPassword.Text;
-        if (PcpLogin.LoginIsValid(email, password))
+        if ((new PcpLogin()).LoginIsValid(email, password))
         {
             lblMessage.Text = "Valid Login";
             Response.Redirect("pcp-dashboard.aspx");
