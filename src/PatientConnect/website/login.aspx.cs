@@ -14,8 +14,6 @@ public partial class login : System.Web.UI.Page
         bool persistLogin = false;
         if ((new PcpLogin()).LoginIsValid(email, password))
         {
-            lblMessage.Text = "Valid Login";
-            //Response.Redirect("Dashboard.aspx");
             FormsAuthentication.RedirectFromLoginPage(email, persistLogin);
         }
         else

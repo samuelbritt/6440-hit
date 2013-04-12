@@ -7,26 +7,26 @@ Log In
 
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="Server">
     <div id="login" class="form">
-        <asp:Label ID="lblMessage" runat="server"></asp:Label>
-        <asp:ValidationSummary ID="ValidationSummary" runat="server" ValidationGroup="pcpLogin"
+        <asp:Label ID="lblMessage" runat="server" CssClass="error-message"></asp:Label>
+        <asp:ValidationSummary ID="ValidationSummary" runat="server" ValidationGroup="login"
             HeaderText="There were errors on the page:" />
         <ol>
             <li>
                 <asp:Label ID="lblUsername" Text="Email:" AssociatedControlID="txtUsername" runat="server" />
-                <asp:TextBox ID="txtUsername" runat="server" ValidationGroup="pcpLogin" />
+                <asp:TextBox ID="txtUsername" runat="server" ValidationGroup="login" />
                 <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtUsername"
-                    ValidationGroup="pcpLogin" ErrorMessage="Email is required.">*</asp:RequiredFieldValidator>
+                    ValidationGroup="login" ErrorMessage="Email is required.">*</asp:RequiredFieldValidator>
             </li>
             <li>
                 <asp:Label ID="lblPassword" Text="Password:" AssociatedControlID="txtPassword" runat="server" />
-                <asp:TextBox ID="txtPassword" runat="server" ValidationGroup="pcpLogin" />
+                <asp:TextBox ID="txtPassword" runat="server" ValidationGroup="login" />
                 <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtPassword"
-                    ValidationGroup="pcpLogin" ErrorMessage="Password is required.">*</asp:RequiredFieldValidator>
+                    ValidationGroup="login" ErrorMessage="Password is required.">*</asp:RequiredFieldValidator>
             </li>
             <li>
                 <label>&nbsp;</label>
                 <asp:Button ID="btnLogin" CssClass="submit" runat="server" OnClick="btnLogin_Click"
-                    Text="Log In" ValidationGroup="pcpLogin" />
+                    Text="Log In" ValidationGroup="login" />
             </li>
         </ol>
     </div>
