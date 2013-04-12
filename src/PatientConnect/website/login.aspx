@@ -12,10 +12,10 @@ Log In
             HeaderText="There were errors on the page:" />
         <ol>
             <li>
-                <asp:Label ID="lblUsername" Text="Email:" AssociatedControlID="txtUsername" runat="server" />
+                <asp:Label ID="lblUsername" Text="Username:" AssociatedControlID="txtUsername" runat="server" />
                 <asp:TextBox ID="txtUsername" runat="server" ValidationGroup="login" />
                 <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtUsername"
-                    ValidationGroup="login" ErrorMessage="Email is required.">*</asp:RequiredFieldValidator>
+                    ValidationGroup="login" ErrorMessage="Username is required.">*</asp:RequiredFieldValidator>
             </li>
             <li>
                 <asp:Label ID="lblPassword" Text="Password:" AssociatedControlID="txtPassword" runat="server" />

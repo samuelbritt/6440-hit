@@ -12,12 +12,13 @@ public partial class login : System.Web.UI.Page
 
     protected void btnLogin_Click(object sender, EventArgs e)
     {
-        string email = txtUsername.Text;
+        string username = txtUsername.Text;
         string password = txtPassword.Text;
         bool persistLogin = false;
-        if ((new PcpLogin()).LoginIsValid(email, password))
+
+        if (Membership.ValidateUser(username, password))
         {
-            FormsAuthentication.RedirectFromLoginPage(email, persistLogin);
+            FormsAuthentication.RedirectFromLoginPage(username, persistLogin);
         }
         else
         {

@@ -17,7 +17,7 @@ public class Database
     {
         get
         {
-            return ConfigurationManager.ConnectionStrings["DatabaseConnectionString"].ConnectionString;
+            return ConfigurationManager.ConnectionStrings["LocalSqlServer"].ConnectionString;
         }
     }
 
