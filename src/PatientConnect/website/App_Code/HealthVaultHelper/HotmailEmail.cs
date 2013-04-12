@@ -1,19 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics;
 using EASendMail; //add EASendMail namespace
 
-using System.Diagnostics;
-using HealthVaultHelper;
-
-using Microsoft.Health.PatientConnect;
-using System.Collections.ObjectModel;
 
 namespace mysendemail
 {

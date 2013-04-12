@@ -1,8 +1,8 @@
-﻿using System.Diagnostics;
-using HealthVaultHelper;
-using System;
-using Microsoft.Health.PatientConnect;
+﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using HealthVaultHelper;
+using Microsoft.Health.PatientConnect;
 
 
 /// <summary>
