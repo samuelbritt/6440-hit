@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Web.Security;
 
-public partial class pcp : System.Web.UI.Page
+public partial class login : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -10,10 +11,12 @@ public partial class pcp : System.Web.UI.Page
     {
         string email = txtUsername.Text;
         string password = txtPassword.Text;
+        bool persistLogin = false;
         if ((new PcpLogin()).LoginIsValid(email, password))
         {
             lblMessage.Text = "Valid Login";
-            Response.Redirect("Dashboard.aspx");
+            //Response.Redirect("Dashboard.aspx");
+            FormsAuthentication.RedirectFromLoginPage(email, persistLogin);
         }
         else
         {

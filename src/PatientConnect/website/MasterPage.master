@@ -1,19 +1,26 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterPage.master.cs" Inherits="MasterPage" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>Patient Connect Test</title>
-    <asp:ContentPlaceHolder id="head" runat="server">
+    <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
-    <link href="StyleSheet.css" rel="stylesheet" type="text/css" />
+    <link href="~/stylesheets/style.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
     <form id="form1" runat="server">
+    <span id="loginControl">
+        <asp:Label ID="msgLoginState" runat="server" />
+        <br />
+        <asp:LinkButton ID="btnLogout" runat="server" OnClick="btnLogout_Click">Log Out</asp:LinkButton>
+    </span>
+    <h1>
+        <asp:ContentPlaceHolder ID="h1" runat="server">
+        </asp:ContentPlaceHolder>
+    </h1>
     <div>
-        <asp:ContentPlaceHolder id="body" runat="server">
-        
+        <asp:ContentPlaceHolder ID="body" runat="server">
         </asp:ContentPlaceHolder>
     </div>
     </form>

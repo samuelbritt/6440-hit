@@ -1,13 +1,15 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true"
-    CodeFile="Default.aspx.cs" Inherits="pcp" %>
+    CodeFile="login.aspx.cs" Inherits="login" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="body" runat="Server">
-    <div id="pcpLogin" class="form">
+<asp:Content ID="Content1" ContentPlaceHolderID="h1" runat="server">
+Log In
+</asp:Content>
+
+<asp:Content ID="Content2" ContentPlaceHolderID="body" runat="Server">
+    <div id="login" class="form">
         <asp:Label ID="lblMessage" runat="server"></asp:Label>
         <asp:ValidationSummary ID="ValidationSummary" runat="server" ValidationGroup="pcpLogin"
             HeaderText="There were errors on the page:" />
-        <p>
-            Primay Care Physician Login</p>
         <ol>
             <li>
                 <asp:Label ID="lblUsername" Text="Email:" AssociatedControlID="txtUsername" runat="server" />
@@ -24,7 +26,7 @@
             <li>
                 <label>&nbsp;</label>
                 <asp:Button ID="btnLogin" CssClass="submit" runat="server" OnClick="btnLogin_Click"
-                    Text="Login" ValidationGroup="pcpLogin" />
+                    Text="Log In" ValidationGroup="pcpLogin" />
             </li>
         </ol>
     </div>
