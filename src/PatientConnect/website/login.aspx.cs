@@ -17,9 +17,9 @@ public partial class login : System.Web.UI.Page
             }
         }
 
-        // hide option to log in, since this is the login page.
         if (!Request.IsAuthenticated)
         {
+            // We are anonymous. Hide option to log in, since this is the login page.
             Control loginStatus = Master.FindControl("LoginStatus");
             loginStatus.Visible = false;
         }
