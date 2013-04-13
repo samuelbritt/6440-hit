@@ -4,16 +4,14 @@
 /// </summary>
 public class PcpLogin
 {
+    private PcpDAO pcpDAO;
 	public PcpLogin()
 	{
-		//
-		// TODO: Add constructor logic here
-		//
+        pcpDAO = new PcpDAO();
 	}
 
-    public static bool LoginIsValid(string username, string password)
+    public bool LoginIsValid(string username, string password)
     {
-        // TODO
-        return true;
+        return pcpDAO.isValidPcp(username, password);
     }
 }

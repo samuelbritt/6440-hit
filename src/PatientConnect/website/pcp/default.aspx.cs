@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Web.Security;
 
-public partial class MasterPage : System.Web.UI.MasterPage
+public partial class pcp_default : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+
     }
 }

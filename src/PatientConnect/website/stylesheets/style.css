@@ -1,4 +1,10 @@
-﻿.form
+﻿#loginControl
+{
+    float:right;
+    text-align:right;
+}
+
+.form
 {
     margin: 20px;
     padding: 10px 20px;
@@ -50,4 +56,9 @@
 {
     display:inline-block;
     vertical-align:text-top;
+}
+
+.error-message
+{
+    color: Red;
 }
