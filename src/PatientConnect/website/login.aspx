@@ -19,7 +19,7 @@ Log In
             </li>
             <li>
                 <asp:Label ID="lblPassword" Text="Password:" AssociatedControlID="txtPassword" runat="server" />
-                <asp:TextBox ID="txtPassword" runat="server" ValidationGroup="login" />
+                <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" ValidationGroup="login" />
                 <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtPassword"
                     ValidationGroup="login" ErrorMessage="Password is required.">*</asp:RequiredFieldValidator>
             </li>
