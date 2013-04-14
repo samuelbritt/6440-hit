@@ -1,27 +1,28 @@
 ﻿using System;
+using Logic;
 
 public partial class redirect : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
         string redirect = "~/login.aspx";
-        if (Context.User.IsInRole("physician"))
+        if (Context.User.IsInRole(Roles.PHYSICIAN))
         {
             redirect = "~/physician";
         }
-        else if (Context.User.IsInRole("pcp"))
+        else if (Context.User.IsInRole(Roles.PCP))
         {
             redirect = "~/pcp";
         }
-        else if (Context.User.IsInRole("nurse"))
+        else if (Context.User.IsInRole(Roles.NURSE))
         {
             redirect = "~/nurse";
         }
-        else if (Context.User.IsInRole("statistician"))
+        else if (Context.User.IsInRole(Roles.STATISTICIAN))
         {
             redirect = "~/statistician";
         }
-        else if (Context.User.IsInRole("it_officer"))
+        else if (Context.User.IsInRole(Roles.IT_OFFICER))
         {
             redirect = "~/it_officer";
         }
