@@ -7,6 +7,12 @@ public partial class nurse_AddPcp : System.Web.UI.Page
     {
 
     }
+
+    protected void btnGenPassword_Click(object sender, EventArgs e)
+    {
+        txtPassword.Text = Membership.GeneratePassword(12, 3);
+    }
+
     protected void btnNewPcp_Click(object sender, EventArgs e)
     {
         if (!IsValid)
@@ -19,7 +25,7 @@ public partial class nurse_AddPcp : System.Web.UI.Page
         pcp.Email = txtEmail.Text;
         pcp.Phone = txtPhone.Text;
         pcp.Username = txtEmail.Text;
-        pcp.Password = Membership.GeneratePassword(12, 3);
+        pcp.Password = txtPassword.Text;
 
         PcpDAO dao = new PcpDAO();
         try

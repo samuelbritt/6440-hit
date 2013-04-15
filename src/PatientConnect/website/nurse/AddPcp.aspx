@@ -47,6 +47,14 @@
                     ValidationGroup="newPcp" ErrorMessage="Phone number is required.">*</asp:RequiredFieldValidator>
             </li>
             <li>
+                <asp:Label ID="lblPassword" Text="Password:" AssociatedControlID="txtPassword" runat="server" />
+                <asp:TextBox ID="txtPassword" runat="server" ValidationGroup="newPcp" />
+                <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="txtPassword"
+                    ValidationGroup="newPcp" ErrorMessage="Password is required.">*</asp:RequiredFieldValidator>
+                <asp:Button ID="btnGenPassword" runat="server" OnClick="btnGenPassword_Click"
+                    Text="Generate" CausesValidation="false" />
+            </li>
+            <li>
                 <label>
                     &nbsp;</label>
                 <asp:Button ID="btnNewPcp" CssClass="submit" runat="server" OnClick="btnNewPcp_Click"

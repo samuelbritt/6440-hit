@@ -20,7 +20,7 @@ public class PcpDAO
 
         if (usernameIsTaken(pcp.Username) || emailIsTaken(pcp.Email))
         {
-            throw new MemberAccessException("Username or Email is taken");
+            throw new MembershipCreateUserException("Username or Email is taken");
         }
         else
         {
@@ -37,7 +37,7 @@ public class PcpDAO
 
     public Pcp GetPcpByUsername(string username)
     {
-        MembershipUser member = Membership.GetUser(username);
+        MembershipUser member = Membership.GetUser(username, false);
         if (member == null)
         {
             return null;
