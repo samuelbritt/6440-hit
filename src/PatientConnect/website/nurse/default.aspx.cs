@@ -5,12 +5,14 @@ using System.Web.UI.WebControls;
 
 public partial class Default : System.Web.UI.Page
 {
+    private static string CREATE_NEW_PCP = "Create New";
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!IsPostBack)
         {
             lblLastUpdateDate.Text = getLastAuthUpdate();
             bindLstAuthorizedParticipants();
+            bindDrpPcps();
         }
     }
 
@@ -52,16 +54,33 @@ public partial class Default : System.Web.UI.Page
         lstAuthParticipants.DataBind();
     }
 
+    private void bindDrpPcps()
+    {
+        ICollection<Pcp> pcpList = (new PcpDAO()).GetAllPcps();
+        drpPcpList.DataSource = pcpList;
+        drpPcpList.DataTextField = "Display";
+        drpPcpList.DataValueField = "Username";
+        drpPcpList.DataBind();
+
+        drpPcpList.Items.Insert(0, new ListItem("Create New PCP", CREATE_NEW_PCP));
+        drpPcpList.SelectedIndex = 0;
+    }
+
     protected void btnEnroll_Click(object sender, EventArgs e)
     {
         if (!IsValid)
             return;
+        if (drpPcpList.SelectedValue == CREATE_NEW_PCP)
+        {
+            Response.Redirect("~/nurse/AddPcp.aspx");
+        }
 
         String firstName = txtParticipantFirstName.Text;
         String lastName = txtParticipantLastName.Text;
         String email = txtParticipantEmail.Text;
         String securityQuestion = txtSecurityQuestion.Text;
         String securityAnswer = txtSecurityAnswer.Text;
+        String pcpUsername = drpPcpList.SelectedValue;
 
         enrollNewParticipant(firstName, lastName, email, securityQuestion, securityAnswer);
         ClearTextBoxes();

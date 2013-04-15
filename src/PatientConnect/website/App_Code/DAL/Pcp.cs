@@ -25,6 +25,14 @@ public class Pcp
         }
     }
 
+    public String Display
+    {
+        get
+        {
+            return String.Format("{0} ({1})", FullName, Institution);
+        }
+    }
+
     public Pcp()
     {
         UserId = Guid.Empty;

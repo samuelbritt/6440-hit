@@ -1,9 +1,9 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true"
     CodeFile="default.aspx.cs" Inherits="Default" %>
-<asp:Content ID="Content1" ContentPlaceHolderID="h1" Runat="Server">
-Participant Dashboard
-</asp:Content>
 
+<asp:Content ID="Content1" ContentPlaceHolderID="h1" runat="Server">
+    Participant Dashboard
+</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="Server">
     <div id="frmAuthParticipantsList" class="form">
         <p>
@@ -62,6 +62,11 @@ Participant Dashboard
                 <asp:TextBox ID="txtSecurityAnswer" runat="server" ValidationGroup="enroll" />
                 <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="txtSecurityAnswer"
                     ValidationGroup="enroll" ErrorMessage="Security answer is required.">*</asp:RequiredFieldValidator>
+            </li>
+            <li>
+                <asp:Label ID="lblPcp" Text="Primary Physician:" AssociatedControlID="drpPcpList" runat="server" />
+                <asp:DropDownList ID="drpPcpList" runat="server">
+                </asp:DropDownList>
             </li>
             <li>
                 <label>

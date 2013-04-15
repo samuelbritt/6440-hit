@@ -5,6 +5,8 @@ using System.Diagnostics;
 using System.Web.Security;
 using System.Web;
 using System.Web.Profile;
+using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 /// <summary>
 /// Summary description for PcpDAO
@@ -52,6 +54,17 @@ public class PcpDAO
         pcp.Institution = profile.Institution;
 
         return pcp;
+    }
+
+    public ICollection<Pcp> GetAllPcps()
+    {
+        List<Pcp> list = new List<Pcp>();
+        string[] usernames = Roles.GetUsersInRole(Logic.Roles.PCP);
+        foreach (var uname in usernames)
+        {
+            list.Add(GetPcpByUsername(uname));
+        }
+        return list;
     }
 
     private bool usernameIsTaken(string username)
