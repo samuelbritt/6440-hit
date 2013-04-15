@@ -25,8 +25,18 @@ public partial class nurse_AddPcp : System.Web.UI.Page
         }
         else
         {
-            MembershipUser newPcp = Membership.CreateUser(username, password, email);
-            Roles.AddUserToRole(newPcp.UserName, Logic.Roles.PCP);
+            try
+            {
+                MembershipUser newPcp = Membership.CreateUser(username, password, email);
+                Roles.AddUserToRole(newPcp.UserName, Logic.Roles.PCP);
+
+            }
+            catch (MembershipCreateUserException)
+            {
+                lblUserExists.Visible = true;
+                return;
+            }
+
         }
 
         Session["lastPcpCreatedUsername"] = username;
