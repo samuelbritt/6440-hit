@@ -13,8 +13,7 @@ public partial class nurse_AddPcpSuccess : System.Web.UI.Page
         string username = (string)Session["lastPcpCreatedUsername"];
         string password = (string)Session["lastPcpCreatedPassword"];
 
-
-        MembershipUser pcp = Membership.GetUser(username);
+        Pcp pcp = (new PcpDAO()).GetPcpByUsername(username);
         if (pcp == null)
         {
             lblInvalidUser.Visible = true;
@@ -24,9 +23,9 @@ public partial class nurse_AddPcpSuccess : System.Web.UI.Page
         lblUsernameVal.Text = username;
         lblPasswordVal.Text = password;
         lblEmailVal.Text = pcp.Email;
-        lblNameVal.Text = "?, ?";
-        lblPhoneVal.Text = "?";
-        lblInstitutionVal.Text = "?";
+        lblNameVal.Text = pcp.FullName;
+        lblPhoneVal.Text = pcp.Phone;
+        lblInstitutionVal.Text = pcp.Institution;
     }
 
 

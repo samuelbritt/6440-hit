@@ -12,44 +12,29 @@ public partial class nurse_AddPcp : System.Web.UI.Page
         if (!IsValid)
             return;
 
-        string username = txtEmail.Text;
-        string firstName = txtFirstName.Text;
-        string lastName = txtLastName.Text;
-        string email = txtEmail.Text;
-        string password = Membership.GeneratePassword(12, 3);
+        Pcp pcp = new Pcp();
+        pcp.FirstName = txtFirstName.Text;
+        pcp.LastName = txtLastName.Text;
+        pcp.Institution = txtInstitution.Text;
+        pcp.Email = txtEmail.Text;
+        pcp.Phone = txtPhone.Text;
+        pcp.Username = txtEmail.Text;
+        pcp.Password = Membership.GeneratePassword(12, 3);
 
-        if (usernameIsTaken(username) || emailIsTaken(email))
+        PcpDAO dao = new PcpDAO();
+        try
+        {
+            dao.InsertNewPcp(pcp);
+        }
+        catch (MembershipCreateUserException)
         {
             lblUserExists.Visible = true;
             return;
         }
-        else
-        {
-            try
-            {
-                MembershipUser newPcp = Membership.CreateUser(username, password, email);
-                Roles.AddUserToRole(newPcp.UserName, Logic.Roles.PCP);
 
-            }
-            catch (MembershipCreateUserException)
-            {
-                lblUserExists.Visible = true;
-                return;
-            }
-
-        }
-
-        Session["lastPcpCreatedUsername"] = username;
-        Session["lastPcpCreatedPassword"] = password;
+        Session["lastPcpCreatedUsername"] = pcp.Username;
+        Session["lastPcpCreatedPassword"] = pcp.Password;
         Response.Redirect("~/nurse/AddPcpSuccess.aspx");
     }
 
-    private bool usernameIsTaken(string username)
-    {
-        return Membership.GetUser(username) != null;
-    }
-    private bool emailIsTaken(string email)
-    {
-        return Membership.GetUserNameByEmail(email) != null;
-    }
 }

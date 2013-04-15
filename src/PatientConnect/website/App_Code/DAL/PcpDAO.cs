@@ -1,55 +1,66 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Data.SqlClient;
 using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Web.Security;
+using System.Web;
+using System.Web.Profile;
 
 /// <summary>
 /// Summary description for PcpDAO
 /// </summary>
 public class PcpDAO
 {
-    private static class Table
+    public PcpDAO()
     {
-        public static string TABLE_NAME = "PCP";
     }
 
-	public PcpDAO()
-	{
-	}
-
-    public bool isValidPcp(string email, string password)
+    public void InsertNewPcp(Pcp pcp)
     {
-        SqlConnection conn = Database.NewConnection();
-        SqlCommand cmd = new SqlCommand();
-        cmd.CommandType = CommandType.StoredProcedure;
-        cmd.CommandText = "[dbo].[PcpValidLogin]";
-        cmd.Parameters.Add("@Email", SqlDbType.VarChar, 256).Value = email;
-        cmd.Parameters.Add("@Password", SqlDbType.VarChar, 256).Value = password;
-        cmd.Parameters.Add("@isValid", SqlDbType.Int, 4);
-        cmd.Parameters["@isValid"].Direction = ParameterDirection.Output;
-        cmd.Connection = conn;
-        int results = 0;
-        try
+
+        if (usernameIsTaken(pcp.Username) || emailIsTaken(pcp.Email))
         {
-            conn.Open();
-            cmd.ExecuteNonQuery();
-            results = (int)cmd.Parameters["@isValid"].Value;
+            throw new MemberAccessException("Username or Email is taken");
         }
-        catch (SqlException ex)
+        else
         {
-            Debug.WriteLine(ex.Message);
+            MembershipUser pcpMember = Membership.CreateUser(pcp.Username, pcp.Password, pcp.Email);
+            Roles.AddUserToRole(pcpMember.UserName, Logic.Roles.PCP);
+            ProfileCommon profile = (ProfileCommon)ProfileCommon.Create(pcpMember.UserName, true);
+            profile.Institution = pcp.Institution;
+            profile.Phone = pcp.Phone;
+            profile.FirstName = pcp.FirstName;
+            profile.LastName = pcp.LastName;
+            profile.Save();
         }
-        finally
+    }
+
+    public Pcp GetPcpByUsername(string username)
+    {
+        MembershipUser member = Membership.GetUser(username);
+        if (member == null)
         {
-            cmd.Dispose();
-            if (conn != null)
-            {
-                conn.Close();
-            }
+            return null;
         }
-        return results == 1;
+        ProfileCommon profile = (ProfileCommon)ProfileCommon.Create(username, true);
+        Pcp pcp = new Pcp();
+        pcp.Username = member.UserName;
+        pcp.Email = member.Email;
+        pcp.FirstName = profile.FirstName;
+        pcp.LastName = profile.LastName;
+        pcp.Phone = profile.Phone;
+        pcp.Institution = profile.Institution;
+
+        return pcp;
+    }
+
+    private bool usernameIsTaken(string username)
+    {
+        return Membership.GetUser(username) != null;
+    }
+
+    private bool emailIsTaken(string email)
+    {
+        return Membership.GetUserNameByEmail(email) != null;
     }
 }
