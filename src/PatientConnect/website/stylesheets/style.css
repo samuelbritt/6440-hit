@@ -1,13 +1,19 @@
-﻿#loginControl
+﻿#container
 {
-    float:right;
-    text-align:right;
+    width: 640px;
+    margin: 10px auto 0;
+}
+
+#loginControl
+{
+    float: right;
+    text-align: right;
 }
 
 .form
 {
-    margin: 20px;
-    padding: 10px 20px;
+    margin: 0;
+    padding: 0;
 }
 
 .form ol
@@ -29,7 +35,11 @@
     width: 120px;
     text-align: right;
     margin-right: 7px;
-    line-height: 30px; /* This will make the labels vertically centered with the inputs */
+}
+
+.form label, .form span
+{
+    line-height: 180%; /* This will make the labels vertically centered with the inputs */
 }
 
 .form input, .form textarea, .form select
@@ -54,8 +64,8 @@
 
 #frmAuthParticipantsList, #frmEnrollNewParticipant
 {
-    display:inline-block;
-    vertical-align:text-top;
+    display: inline-block;
+    vertical-align: text-top;
 }
 
 .error-message

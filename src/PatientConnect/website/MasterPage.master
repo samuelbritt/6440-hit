@@ -10,22 +10,28 @@
 </head>
 <body>
     <form id="form1" runat="server">
+    <div id="container">
+    <header class="info">
     <span id="loginControl">
-    <asp:LoginView ID="LoginView1" runat="server">
-        <AnonymousTemplate>Not logged in</AnonymousTemplate>
-        <LoggedInTemplate></LoggedInTemplate>
-    </asp:LoginView>
-    <asp:LoginName ID="LoginName" runat="server" />
-    <br />
-    <asp:LoginStatus ID="LoginStatus" runat="server" />
+        <asp:LoginView ID="LoginView1" runat="server">
+            <AnonymousTemplate>
+                Not logged in</AnonymousTemplate>
+            <LoggedInTemplate>
+            </LoggedInTemplate>
+        </asp:LoginView>
+        <asp:LoginName ID="LoginName" runat="server" />
+        <br />
+        <asp:LoginStatus ID="LoginStatus" runat="server" />
     </span>
     <h1>
         <asp:ContentPlaceHolder ID="h1" runat="server">
         </asp:ContentPlaceHolder>
     </h1>
+    </header>
     <div>
         <asp:ContentPlaceHolder ID="body" runat="server">
         </asp:ContentPlaceHolder>
+    </div>
     </div>
     </form>
 </body>
