@@ -92,7 +92,7 @@ public class ParticipantEnroller
         {
             participantId = Guid.Parse(validatedPatient.ApplicationPatientId);
         }
-        catch (FormatException e)
+        catch (FormatException)
         {
             // old integer-style key; ignore
             return null;
