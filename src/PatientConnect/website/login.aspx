@@ -25,7 +25,7 @@ Log In
             </li>
             <li>
                 <label>&nbsp;</label>
-                <asp:Button ID="btnLogin" CssClass="submit" runat="server" OnClick="btnLogin_Click"
+                <asp:Button ID="btnLogin" CssClass="buttons" runat="server" OnClick="btnLogin_Click"
                     Text="Log In" ValidationGroup="login" />
             </li>
         </ol>

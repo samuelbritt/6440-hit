@@ -12,8 +12,14 @@
 
 .form
 {
-    margin: 0;
     padding: 0;
+    width: 49%;
+    float: left;
+}
+
+.form.right
+{
+    float: right;
 }
 
 .form ol
@@ -23,30 +29,42 @@
     padding: 0;
 }
 
-.form li, .form p
+.form .header
 {
+    font-weight: bold;
+    background-color: #EEE;
     padding: 6px;
+}
+
+.form li
+{
+    padding: 6px 0;
     margin-bottom: 1px;
 }
 
 .form label
 {
     float: left;
-    width: 120px;
     text-align: right;
     margin-right: 7px;
 }
 
 .form label, .form span
 {
-    line-height: 180%; /* This will make the labels vertically centered with the inputs */
+    width: 40%;
+    padding: 6px 0;
 }
 
 .form input, .form textarea, .form select
 {
+    width: 50%;
     padding: 4px;
     border: 1px solid #999999;
-    width: 200px;
+}
+
+.form .full
+{
+    width: 100%;
 }
 
 .form input:focus, .form textarea:focus
@@ -55,11 +73,11 @@
     background: #e3f1f1;
 }
 
-
-.form input.submit
+.form input.buttons
 {
     margin-top: 6px;
-    width: 150px;
+    padding: 2px 6px;
+    width: auto;
 }
 
 #frmAuthParticipantsList, #frmEnrollNewParticipant
