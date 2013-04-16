@@ -13,13 +13,41 @@
 .form
 {
     padding: 0;
+    margin: 0;
+}
+
+.form.half
+{
     width: 49%;
-    float: left;
+}
+
+.form.third
+{
+    width: 32%;
+}
+
+.form.quarter
+{
+    width: 24%;
 }
 
 .form.right
 {
     float: right;
+    margin-left:10px;
+}
+
+.form.left
+{
+    float: left;
+    margin-right:10px;
+}
+
+.form.expand
+{
+    float:none;
+    width:auto;
+    overflow:auto;
 }
 
 .form ol
@@ -78,12 +106,6 @@
     margin-top: 6px;
     padding: 2px 6px;
     width: auto;
-}
-
-#frmAuthParticipantsList, #frmEnrollNewParticipant
-{
-    display: inline-block;
-    vertical-align: text-top;
 }
 
 .error-message
