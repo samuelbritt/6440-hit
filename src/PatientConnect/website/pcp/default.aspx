@@ -6,4 +6,8 @@
 Welcome to the Primary Care Physician Page
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="body" Runat="Server">
+<p>
+Your patients:
+</p>
+<asp:ListBox ID="lstPatients" runat="server" />
 </asp:Content>
