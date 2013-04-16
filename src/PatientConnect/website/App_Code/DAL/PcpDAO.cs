@@ -1,12 +1,5 @@
-﻿using System;
-using System.Data;
-using System.Data.SqlClient;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Web.Security;
-using System.Web;
-using System.Web.Profile;
-using System.Collections.ObjectModel;
-using System.Collections.Generic;
 
 /// <summary>
 /// Summary description for PcpDAO
@@ -28,13 +21,13 @@ public class PcpDAO
         {
             MembershipUser pcpMember = Membership.CreateUser(pcp.Username, pcp.Password, pcp.Email);
             Roles.AddUserToRole(pcpMember.UserName, Logic.Roles.PCP);
-            ProfileCommon profile = (ProfileCommon)ProfileCommon.Create(pcpMember.UserName, true);
-            profile.Institution = pcp.Institution;
-            profile.Phone = pcp.Phone;
-            profile.FirstName = pcp.FirstName;
-            profile.LastName = pcp.LastName;
-            profile.Save();
+            UpdatePcpProfile(pcp);
         }
+    }
+
+    public void UpdatePcp(Pcp pcp)
+    {
+        UpdatePcpProfile(pcp);
     }
 
     public Pcp GetPcpByUsername(string username)
@@ -65,6 +58,16 @@ public class PcpDAO
             list.Add(GetPcpByUsername(uname));
         }
         return list;
+    }
+
+    private void UpdatePcpProfile(Pcp pcp)
+    {
+        ProfileCommon profile = (ProfileCommon)ProfileCommon.Create(pcp.Username, true);
+        profile.FirstName = pcp.FirstName;
+        profile.LastName = pcp.LastName;
+        profile.Institution = pcp.Institution;
+        profile.Phone = pcp.Phone;
+        profile.Save();
     }
 
     private bool usernameIsTaken(string username)

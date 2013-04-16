@@ -28,6 +28,7 @@ public class ParticipantDAO
         public static string SECURITY_QUESTION = "SecurityQuestion";
         public static string SECURITY_ANSWER = "SecurityAnswer";
         public static string HAS_AUTHORIZED = "HasAuthorized";
+        public static string PCP_USERNAME = "PcpUsername";
         public static string ALL_COLUMNS = String.Format(
             "{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}",
             PARTICIPANT_ID,
@@ -39,7 +40,8 @@ public class ParticipantDAO
             HV_PARTICIPANT_CODE,
             SECURITY_QUESTION,
             SECURITY_ANSWER,
-            HAS_AUTHORIZED);
+            HAS_AUTHORIZED,
+            PCP_USERNAME);
     }
 
     /// <summary>
@@ -57,6 +59,7 @@ public class ParticipantDAO
         public static string SECURITY_QUESTION = "@SecurityQuestion";
         public static string SECURITY_ANSWER = "@SecurityAnswer";
         public static string HAS_AUTHORIZED = "@HasAuthorized";
+        public static string PCP_USERNAME = "@PcpUsername";
         public static string ALL_COLUMNS = String.Format(
             "{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}",
             PARTICIPANT_ID,
@@ -68,7 +71,8 @@ public class ParticipantDAO
             HV_PARTICIPANT_CODE,
             SECURITY_QUESTION,
             SECURITY_ANSWER,
-            HAS_AUTHORIZED);
+            HAS_AUTHORIZED,
+            PCP_USERNAME);
     }
 
     public ParticipantDAO()
@@ -108,7 +112,8 @@ public class ParticipantDAO
             + String.Format("{0}={1}, ", Table.HV_PARTICIPANT_CODE, Params.HV_PARTICIPANT_CODE)
             + String.Format("{0}={1}, ", Table.SECURITY_QUESTION, Params.SECURITY_QUESTION)
             + String.Format("{0}={1}, ", Table.SECURITY_ANSWER, Params.SECURITY_ANSWER)
-            + String.Format("{0}={1} ", Table.HAS_AUTHORIZED, Params.HAS_AUTHORIZED)
+            + String.Format("{0}={1}, ", Table.HAS_AUTHORIZED, Params.HAS_AUTHORIZED)
+            + String.Format("{0}={1} ", Table.PCP_USERNAME, Params.PCP_USERNAME)
             + String.Format("WHERE {0}={1}", Table.PARTICIPANT_ID, Params.PARTICIPANT_ID);
 
         SqlCommand command = new SqlCommand(query);
@@ -141,10 +146,22 @@ public class ParticipantDAO
     /// Gets all participants that have authorized the application.
     /// </summary>
     /// <returns>List of authorized Participant objects</returns>
-    public ICollection<Participant> getAuthorizedParticipants()
+    public ICollection<Participant> GetAuthorizedParticipants()
     {
         string query = String.Format("SELECT * FROM {0} WHERE {1}=1 ORDER BY {2}",
             Table.TABLE_NAME, Table.HAS_AUTHORIZED, Table.LAST_NAME);
+        SqlCommand command = new SqlCommand(query);
+        DataTable dataTable = new DataTable();
+        ExecuteFillDataTable(command, dataTable);
+        ICollection<Participant> participantList = ParticipantCollectionFromDataTable(dataTable);
+        dataTable.Dispose();
+        return participantList;
+    }
+
+    public ICollection<Participant> GetParticipantsForPcp(string pcpUsername)
+    {
+        string query = String.Format("SELECT * FROM {0} WHERE {1}='{2}' ORDER BY {3}",
+            Table.TABLE_NAME, Table.PCP_USERNAME, pcpUsername, Table.LAST_NAME);
         SqlCommand command = new SqlCommand(query);
         DataTable dataTable = new DataTable();
         ExecuteFillDataTable(command, dataTable);
@@ -164,6 +181,7 @@ public class ParticipantDAO
         command.Parameters.AddWithValue(Params.SECURITY_QUESTION, participant.SecurityQuestion);
         command.Parameters.AddWithValue(Params.SECURITY_ANSWER, participant.SecurityAnswer);
         command.Parameters.AddWithValue(Params.HAS_AUTHORIZED, participant.HasAuthorized);
+        command.Parameters.AddWithValue(Params.PCP_USERNAME, participant.PcpUsername);
     }
 
     private void AddAllParamsToCommand(SqlCommand command, Participant participant)
@@ -279,6 +297,7 @@ public class ParticipantDAO
         participant.SecurityQuestion = row[Table.SECURITY_QUESTION].ToString();
         participant.SecurityAnswer = row[Table.SECURITY_ANSWER].ToString();
         participant.HasAuthorized = (bool)row[Table.HAS_AUTHORIZED];
+        participant.PcpUsername = row[Table.PCP_USERNAME].ToString();
         return participant;
     }
 }

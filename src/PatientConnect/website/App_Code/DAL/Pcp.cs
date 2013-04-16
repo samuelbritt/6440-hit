@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 /// <summary>
 /// Summary description for Pcp
 /// </summary>
 public class Pcp
 {
-    public Guid UserId { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Email { get; set; }
@@ -31,10 +27,5 @@ public class Pcp
         {
             return String.Format("{0} ({1})", FullName, Institution);
         }
-    }
-
-    public Pcp()
-    {
-        UserId = Guid.Empty;
     }
 }
