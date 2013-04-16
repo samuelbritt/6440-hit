@@ -7,14 +7,14 @@
     Welcome to the Primary Care Physician Page
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="body" runat="Server">
-    <div id="myPatients" class="form left quarter">
+    <div id="frmMyPatients" class="form left quarter">
         <p class="header">
             Your Patients
         </p>
         <asp:ListBox ID="lstPatients" CssClass="full" OnSelectedIndexChanged="lstPatients_SelectedIndexChanged"
            AutoPostBack="true" runat="server" />
     </div>
-    <div id="selectedPatient" class="form expand">
+    <div id="frmSelectedPatient" class="form expand" runat="server">
         <p class="header">
             <asp:Label ID="lblPatientHeader" runat="server"></asp:Label>
         </p>

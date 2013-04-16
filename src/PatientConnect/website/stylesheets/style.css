@@ -34,20 +34,25 @@
 .form.right
 {
     float: right;
-    margin-left:10px;
+    margin-left: 10px;
 }
 
 .form.left
 {
     float: left;
-    margin-right:10px;
+    margin-right: 10px;
+}
+
+.form.center
+{
+    margin: 0 auto;
 }
 
 .form.expand
 {
-    float:none;
-    width:auto;
-    overflow:auto;
+    float: none;
+    width: auto;
+    overflow: auto;
 }
 
 .form ol

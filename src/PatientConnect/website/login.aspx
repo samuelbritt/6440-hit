@@ -6,7 +6,7 @@ Log In
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="Server">
-    <div id="login" class="form">
+    <div id="login" class="form center half">
         <asp:Label ID="lblMessage" runat="server" CssClass="error-message"></asp:Label>
         <asp:ValidationSummary ID="ValidationSummary" runat="server" ValidationGroup="login"
             HeaderText="There were errors on the page:" />

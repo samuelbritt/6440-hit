@@ -8,6 +8,7 @@ public partial class pcp_default : System.Web.UI.Page
         if (!IsPostBack)
         {
             BindLstPatients();
+            frmSelectedPatient.Visible = false;
         }
     }
 
@@ -29,6 +30,7 @@ public partial class pcp_default : System.Web.UI.Page
         Guid pid = Guid.Parse(lstPatients.SelectedValue);
         Participant participant = (new ParticipantDAO()).FindParticipantById(pid);
         DisplaySelectedParticipant(participant);
+        frmSelectedPatient.Visible = true;
     }
 
     private void DisplaySelectedParticipant(Participant participant)

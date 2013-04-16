@@ -5,7 +5,7 @@
     Participant Dashboard
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="Server">
-    <div id="frmAuthParticipantsList" class="form left half">
+    <div id="frmAuthParticipantsList" class="form left third">
         <p class="header">
             Authorized Participants</p>
         <ol>
@@ -22,7 +22,7 @@
             </li>
         </ol>
     </div>
-    <div id="frmEnrollNewParticipant" class="form right half">
+    <div id="frmEnrollNewParticipant" class="form right expand">
         <p class="header">
             Enroll New Participant</p>
         <asp:ValidationSummary ID="ValidationSummary" runat="server" ValidationGroup="enroll"
