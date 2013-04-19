@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using EASendMail; //add EASendMail namespace
 
-
 namespace mysendemail
 {
     class HotmailEmail

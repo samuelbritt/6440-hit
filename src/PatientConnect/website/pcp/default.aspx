@@ -17,6 +17,7 @@
     <div id="frmSelectedPatient" class="form expand" runat="server">
         <p class="header">
             <asp:Label ID="lblPatientHeader" runat="server"></asp:Label>
+            <asp:Label ID="lblPatientInfo" runat="server"></asp:Label>
         </p>
     </div>
 </asp:Content>
