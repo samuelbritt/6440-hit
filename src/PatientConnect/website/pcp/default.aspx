@@ -23,9 +23,6 @@
             <asp:Label ID="lblPatientAllergy" runat="server"></asp:Label>
         </p>
         <p class="header">
-            <asp:Label ID="lblPatientInfo" runat="server"></asp:Label>
-        </p>
-        <p class="header">
             <asp:Label ID="lblPatientGlucose" runat="server"></asp:Label>
         </p>
         <p class="header">
