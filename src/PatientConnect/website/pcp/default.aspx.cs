@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using Microsoft.Health;
 using Microsoft.Health.ItemTypes;
 using System.Diagnostics;
-
+using System.Web.Configuration;
+using Microsoft.Health.Web;
 
 
     public partial class pcp_default : System.Web.UI.Page
@@ -47,22 +48,21 @@ using System.Diagnostics;
             {
                 Guid pid = Guid.Parse(lstPatients.SelectedValue);
 
-                HealthClientApplication clientApp = HealthClientApplication.Create(
-                    Properties.Settings.Default.clientAppId,
-                    Properties.Settings.Default.masterAppId,
-                    new Uri(Properties.Settings.Default.shellUrl),
-                    new Uri(Properties.Settings.Default.platformUrl)
-                    );
-                HealthClientAuthorizedConnection authConnection = clientApp.CreateAuthorizedConnection(participant.HVRecordID);
-                HealthRecordAccessor access = new HealthRecordAccessor(authConnection, authConnection.GetPersonInfo().GetSelfRecord().Id);
-
-
-
-                HealthRecordSearcher search = access.CreateSearcher();
+                OfflineWebApplicationConnection offlineConn =
+                    new OfflineWebApplicationConnection(participant.HVPersonID);
+                //Debug.WriteLine("Authentication");
+                offlineConn.Authenticate();
+ 
+                HealthRecordAccessor accessor =
+                    new HealthRecordAccessor(offlineConn, participant.HVRecordID);
+                //Debug.WriteLine("Accessor");
+                HealthRecordSearcher search = accessor.CreateSearcher();
+                Weight w=new Weight();
                 search.Filters.Add(new HealthRecordFilter(Basic.TypeId));
                 HealthRecordItemCollection searchResultsGroup = search.GetMatchingItems()[0];
                 if (searchResultsGroup.Count > 0)
                 {
+                    Debug.WriteLine("There is STUFF");
                     // Success - write the user name and default basic demographic info 
                     //   to the console.
                     Basic info = (Basic)searchResultsGroup[0];
