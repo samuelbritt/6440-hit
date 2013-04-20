@@ -19,5 +19,20 @@
             <asp:Label ID="lblPatientHeader" runat="server"></asp:Label>
             <asp:Label ID="lblPatientInfo" runat="server"></asp:Label>
         </p>
+        <p class="header">
+            <asp:Label ID="lblPatientAllergy" runat="server"></asp:Label>
+        </p>
+        <p class="header">
+            <asp:Label ID="lblPatientInfo" runat="server"></asp:Label>
+        </p>
+        <p class="header">
+            <asp:Label ID="lblPatientGlucose" runat="server"></asp:Label>
+        </p>
+        <p class="header">
+            <asp:Label ID="lblPatientHeight" runat="server"></asp:Label>
+        </p>
+        <p class="header">
+            <asp:Label ID="lblPatientWeight" runat="server"></asp:Label>
+        </p>
     </div>
 </asp:Content>
