@@ -1,10 +1,10 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true"
-    CodeFile="default.aspx.cs" Inherits="pcp_default" %>
+    CodeFile="default.aspx.cs" Inherits="oncologist_default" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="h1" runat="Server">
-    Welcome to the Primary Care Physician Page
+    Welcome to the Oncologist Page
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="body" runat="Server">
     <div id="frmMyPatients" class="form left quarter">
@@ -26,28 +26,10 @@
         <asp:Label ID="lblPatientBasic" runat="server"></asp:Label>
         </p>
         <p class="header">
-            <asp:Label ID="lblPatientAllergy" runat="server"></asp:Label>
-        </p>
-        <p class="header">
-            <asp:Label ID="lblPatientGlucose" runat="server"></asp:Label>
-        </p>
-        <p class="header">
-            <asp:Label ID="lblPatientPressure" runat="server"></asp:Label>
-        </p>
-        <p class="header">
-            <asp:Label ID="lblPatientHeight" runat="server"></asp:Label>
-        </p>
-        <p class="header">
             <asp:Label ID="lblPatientCondition" runat="server"></asp:Label>
         </p>
         <p class="header">
             <asp:Label ID="lblPatientProcedure" runat="server"></asp:Label>
-        </p>
-
-
-
-        <p class="header">
-            <asp:Label ID="lblPatientWeight" runat="server"></asp:Label>
         </p>
         <p class="header">
             <asp:Label ID="lblPatientMedication" runat="server"></asp:Label>

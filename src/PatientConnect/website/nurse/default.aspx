@@ -134,5 +134,8 @@
                     Text="Enroll Participant" ValidationGroup="enroll" />
             </li>
         </ol>
+        <p class="form">
+        <asp:Label ID="Success" runat="server"></asp:Label>
+        </p>
     </div>
 </asp:Content>

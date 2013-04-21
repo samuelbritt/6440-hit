@@ -7,7 +7,7 @@ namespace Logic
     public static class Roles
     {
         public static string PCP = "pcp";
-        public static string PHYSICIAN = "physician";
+        public static string ONCOLOGIST = "oncologist";
         public static string NURSE = "nurse";
         public static string STATISTICIAN = "statistician";
         public static string IT_OFFICER = "it_officer";

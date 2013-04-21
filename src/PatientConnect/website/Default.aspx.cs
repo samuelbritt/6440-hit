@@ -6,9 +6,9 @@ public partial class redirect : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         string redirect = "~/login.aspx";
-        if (Context.User.IsInRole(Roles.PHYSICIAN))
+        if (Context.User.IsInRole(Roles.ONCOLOGIST))
         {
-            redirect = "~/physician";
+            redirect = "~/oncologist";
         }
         else if (Context.User.IsInRole(Roles.PCP))
         {

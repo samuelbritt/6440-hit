@@ -29,8 +29,9 @@ public class ParticipantDAO
         public static string SECURITY_ANSWER = "SecurityAnswer";
         public static string HAS_AUTHORIZED = "HasAuthorized";
         public static string PCP_USERNAME = "PcpUsername";
+        public static string IS_ELIGIBLE = "IsEligible";
         public static string ALL_COLUMNS = String.Format(
-            "{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}",
+            "{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}",
             PARTICIPANT_ID,
             FIRST_NAME,
             LAST_NAME,
@@ -41,7 +42,8 @@ public class ParticipantDAO
             SECURITY_QUESTION,
             SECURITY_ANSWER,
             HAS_AUTHORIZED,
-            PCP_USERNAME);
+            PCP_USERNAME,
+            IS_ELIGIBLE);
     }
 
     /// <summary>
@@ -60,8 +62,9 @@ public class ParticipantDAO
         public static string SECURITY_ANSWER = "@SecurityAnswer";
         public static string HAS_AUTHORIZED = "@HasAuthorized";
         public static string PCP_USERNAME = "@PcpUsername";
+        public static string IS_ELIGIBLE = "@IsEligible";
         public static string ALL_COLUMNS = String.Format(
-            "{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}",
+            "{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}",
             PARTICIPANT_ID,
             FIRST_NAME,
             LAST_NAME,
@@ -72,7 +75,8 @@ public class ParticipantDAO
             SECURITY_QUESTION,
             SECURITY_ANSWER,
             HAS_AUTHORIZED,
-            PCP_USERNAME);
+            PCP_USERNAME,
+            IS_ELIGIBLE);
     }
 
     public ParticipantDAO()
@@ -113,7 +117,8 @@ public class ParticipantDAO
             + String.Format("{0}={1}, ", Table.SECURITY_QUESTION, Params.SECURITY_QUESTION)
             + String.Format("{0}={1}, ", Table.SECURITY_ANSWER, Params.SECURITY_ANSWER)
             + String.Format("{0}={1}, ", Table.HAS_AUTHORIZED, Params.HAS_AUTHORIZED)
-            + String.Format("{0}={1} ", Table.PCP_USERNAME, Params.PCP_USERNAME)
+            + String.Format("{0}={1}, ", Table.PCP_USERNAME, Params.PCP_USERNAME)
+            + String.Format("{0}={1} ", Table.IS_ELIGIBLE, Params.IS_ELIGIBLE)
             + String.Format("WHERE {0}={1}", Table.PARTICIPANT_ID, Params.PARTICIPANT_ID);
 
         SqlCommand command = new SqlCommand(query);
@@ -158,6 +163,22 @@ public class ParticipantDAO
         return participantList;
     }
 
+    /// <summary>
+    /// Gets all participants that are eligible for the oncology trial.
+    /// </summary>
+    /// <returns>List of eligible Participant objects</returns>
+    public ICollection<Participant> GetEligibleParticipants()
+    {
+        string query = String.Format("SELECT * FROM {0} WHERE {1}=1 ORDER BY {2}",
+            Table.TABLE_NAME, Table.IS_ELIGIBLE, Table.LAST_NAME);
+        SqlCommand command = new SqlCommand(query);
+        DataTable dataTable = new DataTable();
+        ExecuteFillDataTable(command, dataTable);
+        ICollection<Participant> participantList = ParticipantCollectionFromDataTable(dataTable);
+        dataTable.Dispose();
+        return participantList;
+    }
+
     public ICollection<Participant> GetParticipantsForPcp(string pcpUsername)
     {
         string query = String.Format("SELECT * FROM {0} WHERE {1}='{2}' ORDER BY {3}",
@@ -172,6 +193,7 @@ public class ParticipantDAO
 
     private void AddAllParamsExceptIDToCommand(SqlCommand command, Participant participant)
     {
+        
         command.Parameters.AddWithValue(Params.FIRST_NAME, participant.FirstName);
         command.Parameters.AddWithValue(Params.LAST_NAME, participant.LastName);
         command.Parameters.AddWithValue(Params.EMAIL, participant.Email);
@@ -182,6 +204,7 @@ public class ParticipantDAO
         command.Parameters.AddWithValue(Params.SECURITY_ANSWER, participant.SecurityAnswer);
         command.Parameters.AddWithValue(Params.HAS_AUTHORIZED, participant.HasAuthorized);
         command.Parameters.AddWithValue(Params.PCP_USERNAME, participant.PcpUsername);
+        command.Parameters.AddWithValue(Params.IS_ELIGIBLE, participant.IsEligible);
     }
 
     private void AddAllParamsToCommand(SqlCommand command, Participant participant)
@@ -233,7 +256,7 @@ public class ParticipantDAO
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("FFFFFFFFFFFF "+ex.Message);
             }
         }
         return result;
@@ -298,6 +321,7 @@ public class ParticipantDAO
         participant.SecurityAnswer = row[Table.SECURITY_ANSWER].ToString();
         participant.HasAuthorized = (bool)row[Table.HAS_AUTHORIZED];
         participant.PcpUsername = row[Table.PCP_USERNAME].ToString();
+        participant.IsEligible = (bool)row[Table.IS_ELIGIBLE];
         return participant;
     }
 }

@@ -107,7 +107,6 @@ public partial class Default : System.Web.UI.Page
             lblUserExists.Visible = true;
             return;
         }
-
         enrollNewParticipant(firstName, lastName, email, securityQuestion, securityAnswer, pcpUsername);
         ClearTextBoxes();
         ResetPcpDropdown();
@@ -201,7 +200,9 @@ public partial class Default : System.Web.UI.Page
     protected void btnCheckAuth_Click(object sender, EventArgs e)
     {
         ParticipantEnroller enroller = new ParticipantEnroller();
-        enroller.UpdateAuthorizedParticipants();
+        String included=enroller.UpdateAuthorizedParticipants();
+        if (included == "AllAuthorized") Success.Text = "All Patients Included";
+        else Success.Text = "Patients not Satisfying Criteria: "+included;
         setLastAuthUpdate(DateTime.Now);
         bindLstAuthorizedParticipants();
         lblLastUpdateDate.Text = getLastAuthUpdate();

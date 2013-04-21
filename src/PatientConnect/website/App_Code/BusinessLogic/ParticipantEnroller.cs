@@ -3,6 +3,12 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using HealthVaultHelper;
 using Microsoft.Health.PatientConnect;
+using System.Collections.Generic;
+using Microsoft.Health;
+using Microsoft.Health.ItemTypes;
+using System.Web.Configuration;
+using Microsoft.Health.Web;
+
 
 
 /// <summary>
@@ -27,14 +33,14 @@ public class ParticipantEnroller
     public void EnrollNewParticipant(Participant participant)
     {
         participant.HasAuthorized = false;
-
+        
         // get app-specific participant ID from database
         participant.ID = ParticipantDAO.InsertParticipant(participant);
 
         // enroll with healthvault
         participant.HVParticipantCode = HvEnroller.GetParticipantCode(participant);
         SendEnrollmentEmail(participant);
-
+        participant.IsEligible = false;
         // update data store for participant
         ParticipantDAO.UpdateParticipant(participant);
     }
@@ -45,7 +51,8 @@ public class ParticipantEnroller
     /// <param name="participant">Participant to enroll</param>
     private void SendEnrollmentEmail(Participant participant)
     {
-        Debug.WriteLine("Arriba");
+        Debug.WriteLine("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO "+participant.IsEligible);
+        //Debug.WriteLine("Arriba");
         // TODO: actually send an email
         mysendemail.HotmailEmail em = new mysendemail.HotmailEmail();
         
@@ -63,21 +70,57 @@ public class ParticipantEnroller
     /// <summary>
     /// Updates the database with the newly authenticated participants.
     /// </summary>
-    public void UpdateAuthorizedParticipants()
+    public String UpdateAuthorizedParticipants()
     {
+        
+        String UnauthorizedPatients = "";
         // TODO: only check since the last update
         Collection<ValidatedPatientConnection> patientConnections = HvEnroller.GetAuthorizedParticipants(0);
         foreach (var validatedPatient in patientConnections)
         {
             Participant participant = ValidatedPatientConnectionToParticipant(validatedPatient);
-            if (participant == null || participant.HasAuthorized)
-                continue;
+            if (participant != null && (participant.HasAuthorized && !participant.IsEligible)) UnauthorizedPatients += participant.FullName + " || "; 
 
+            if (participant == null)
+                continue;
+            participant.HasAuthorized = true;
             participant.HVPersonID = validatedPatient.PersonId;
             participant.HVRecordID = validatedPatient.RecordId;
-            participant.HasAuthorized = true;
-            ParticipantDAO.UpdateParticipant(participant);
+            OfflineWebApplicationConnection conn = HVConnectionManager.CreateConnection(participant.HVPersonID);
+            HealthRecordAccessor accessor = new HealthRecordAccessor(conn, participant.HVRecordID);
+            HealthRecordSearcher search = accessor.CreateSearcher();
+            search.Filters.Add(new HealthRecordFilter(Basic.TypeId));
+            search.Filters.Add(new HealthRecordFilter(Condition.TypeId));
+            search.Filters.Add(new HealthRecordFilter(Procedure.TypeId));
+
+
+
+            if (search.GetMatchingItems()[0].Count > 0 && search.GetMatchingItems()[1].Count > 0 && search.GetMatchingItems()[2].Count > 0)
+            {
+                Debug.WriteLine("ENTERED!!!");
+               
+                participant.IsEligible = true;
+                Debug.WriteLine(participant.HasAuthorized.ToString(), " ", participant.IsEligible.ToString());
+                ParticipantDAO.UpdateParticipant(participant);
+                //return "AllAuthorized";
+            }
+            else
+            {
+                Debug.WriteLine("NOT ENTERED!!!");
+
+                participant.IsEligible = false;
+                ParticipantDAO.UpdateParticipant(participant);
+                UnauthorizedPatients += participant.FullName + " || ";
+                //return UnauthorizedPatients;
+            }
+
+
+            
         }
+
+        if (UnauthorizedPatients.Length > 0) return UnauthorizedPatients;
+        else return "AllAuthorized";
+        
     }
 
     /// <summary>

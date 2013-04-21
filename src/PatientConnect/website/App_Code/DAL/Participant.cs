@@ -17,6 +17,7 @@ public class Participant
     public string SecurityAnswer { get; set; }
     public bool HasAuthorized { get; set; }
     public string PcpUsername { get; set; }
+    public bool IsEligible { get; set; }
 
     public string FullName
     {
