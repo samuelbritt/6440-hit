@@ -18,11 +18,13 @@ public class ParticipantEnroller
 {
     private HVParticipantEnroller HvEnroller;
     private ParticipantDAO ParticipantDAO;
+    private Random rand;
 
     public ParticipantEnroller()
     {
         HvEnroller = new HVParticipantEnroller();
         ParticipantDAO = new ParticipantDAO();
+        rand = new Random();
     }
 
     /// <summary>
@@ -33,6 +35,8 @@ public class ParticipantEnroller
     public void EnrollNewParticipant(Participant participant)
     {
         participant.HasAuthorized = false;
+        participant.IsEligible = false;
+        participant.TrialGroup = "";
         
         // get app-specific participant ID from database
         participant.ID = ParticipantDAO.InsertParticipant(participant);
@@ -40,7 +44,7 @@ public class ParticipantEnroller
         // enroll with healthvault
         participant.HVParticipantCode = HvEnroller.GetParticipantCode(participant);
         SendEnrollmentEmail(participant);
-        participant.IsEligible = false;
+
         // update data store for participant
         ParticipantDAO.UpdateParticipant(participant);
     }
@@ -51,19 +55,17 @@ public class ParticipantEnroller
     /// <param name="participant">Participant to enroll</param>
     private void SendEnrollmentEmail(Participant participant)
     {
-        Debug.WriteLine("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO "+participant.IsEligible);
+        Debug.WriteLine("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO " + participant.IsEligible);
         //Debug.WriteLine("Arriba");
         // TODO: actually send an email
         mysendemail.HotmailEmail em = new mysendemail.HotmailEmail();
-        
-
 
         if (String.IsNullOrEmpty(participant.Email))
             throw new Exception("Invalid email");
 
         string targetUrl = HvEnroller.BuildTargetEnrollmentUrl(participant);
-        string msg = String.Format("Send email to {0} with link to {1}", participant.Email, targetUrl);
-        em.Sender(msg);
+        string msg = String.Format("This email is to allow the user with Email ID {0} with link to {1}", participant.Email, targetUrl);
+        em.Sender(msg, participant.Email);
         Debug.WriteLine(msg);
     }
 
@@ -79,7 +81,7 @@ public class ParticipantEnroller
         foreach (var validatedPatient in patientConnections)
         {
             Participant participant = ValidatedPatientConnectionToParticipant(validatedPatient);
-            if (participant != null && (participant.HasAuthorized && !participant.IsEligible)) UnauthorizedPatients += participant.FullName + " || "; 
+            //if (participant != null && (participant.HasAuthorized && !participant.IsEligible)) UnauthorizedPatients += participant.FullName + " || "; 
 
             if (participant == null)
                 continue;
@@ -100,6 +102,8 @@ public class ParticipantEnroller
                 Debug.WriteLine("ENTERED!!!");
                
                 participant.IsEligible = true;
+                // RANDOM GENERATOR
+                if (participant.TrialGroup == "") participant.TrialGroup = (rand.Next(2) == 0) ? "A" : "B";
                 Debug.WriteLine(participant.HasAuthorized.ToString(), " ", participant.IsEligible.ToString());
                 ParticipantDAO.UpdateParticipant(participant);
                 //return "AllAuthorized";
@@ -109,6 +113,7 @@ public class ParticipantEnroller
                 Debug.WriteLine("NOT ENTERED!!!");
 
                 participant.IsEligible = false;
+                participant.TrialGroup = "";
                 ParticipantDAO.UpdateParticipant(participant);
                 UnauthorizedPatients += participant.FullName + " || ";
                 //return UnauthorizedPatients;

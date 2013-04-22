@@ -18,6 +18,7 @@ public class Participant
     public bool HasAuthorized { get; set; }
     public string PcpUsername { get; set; }
     public bool IsEligible { get; set; }
+    public string TrialGroup { get; set; }
 
     public string FullName
     {

@@ -30,8 +30,9 @@ public class ParticipantDAO
         public static string HAS_AUTHORIZED = "HasAuthorized";
         public static string PCP_USERNAME = "PcpUsername";
         public static string IS_ELIGIBLE = "IsEligible";
+        public static string TRIAL_GROUP = "TrialGroup";
         public static string ALL_COLUMNS = String.Format(
-            "{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}",
+            "{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}",
             PARTICIPANT_ID,
             FIRST_NAME,
             LAST_NAME,
@@ -43,7 +44,8 @@ public class ParticipantDAO
             SECURITY_ANSWER,
             HAS_AUTHORIZED,
             PCP_USERNAME,
-            IS_ELIGIBLE);
+            IS_ELIGIBLE,
+            TRIAL_GROUP);
     }
 
     /// <summary>
@@ -63,8 +65,9 @@ public class ParticipantDAO
         public static string HAS_AUTHORIZED = "@HasAuthorized";
         public static string PCP_USERNAME = "@PcpUsername";
         public static string IS_ELIGIBLE = "@IsEligible";
+        public static string TRIAL_GROUP = "@TrialGroup";
         public static string ALL_COLUMNS = String.Format(
-            "{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}",
+            "{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}",
             PARTICIPANT_ID,
             FIRST_NAME,
             LAST_NAME,
@@ -76,7 +79,8 @@ public class ParticipantDAO
             SECURITY_ANSWER,
             HAS_AUTHORIZED,
             PCP_USERNAME,
-            IS_ELIGIBLE);
+            IS_ELIGIBLE,
+            TRIAL_GROUP);
     }
 
     public ParticipantDAO()
@@ -118,7 +122,8 @@ public class ParticipantDAO
             + String.Format("{0}={1}, ", Table.SECURITY_ANSWER, Params.SECURITY_ANSWER)
             + String.Format("{0}={1}, ", Table.HAS_AUTHORIZED, Params.HAS_AUTHORIZED)
             + String.Format("{0}={1}, ", Table.PCP_USERNAME, Params.PCP_USERNAME)
-            + String.Format("{0}={1} ", Table.IS_ELIGIBLE, Params.IS_ELIGIBLE)
+            + String.Format("{0}={1}, ", Table.IS_ELIGIBLE, Params.IS_ELIGIBLE)
+            + String.Format("{0}={1} ", Table.TRIAL_GROUP, Params.TRIAL_GROUP)
             + String.Format("WHERE {0}={1}", Table.PARTICIPANT_ID, Params.PARTICIPANT_ID);
 
         SqlCommand command = new SqlCommand(query);
@@ -179,6 +184,23 @@ public class ParticipantDAO
         return participantList;
     }
 
+    /// <summary>
+    /// Gets all participants that are in trial group of passed argument.
+    /// </summary>
+    /// <returns>List of eligible Participant objects</returns>
+    public ICollection<Participant> GetTrialGroup(string tGroup)
+    {
+        string query = String.Format("SELECT * FROM {0} WHERE {1}='" + tGroup + "' ORDER BY {2}",
+            Table.TABLE_NAME, Table.TRIAL_GROUP, Table.LAST_NAME);
+        Debug.WriteLine(query);
+        SqlCommand command = new SqlCommand(query);
+        DataTable dataTable = new DataTable();
+        ExecuteFillDataTable(command, dataTable);
+        ICollection<Participant> participantList = ParticipantCollectionFromDataTable(dataTable);
+        dataTable.Dispose();
+        return participantList;
+    }
+
     public ICollection<Participant> GetParticipantsForPcp(string pcpUsername)
     {
         string query = String.Format("SELECT * FROM {0} WHERE {1}='{2}' ORDER BY {3}",
@@ -205,6 +227,7 @@ public class ParticipantDAO
         command.Parameters.AddWithValue(Params.HAS_AUTHORIZED, participant.HasAuthorized);
         command.Parameters.AddWithValue(Params.PCP_USERNAME, participant.PcpUsername);
         command.Parameters.AddWithValue(Params.IS_ELIGIBLE, participant.IsEligible);
+        command.Parameters.AddWithValue(Params.TRIAL_GROUP, participant.TrialGroup);
     }
 
     private void AddAllParamsToCommand(SqlCommand command, Participant participant)
@@ -322,6 +345,7 @@ public class ParticipantDAO
         participant.HasAuthorized = (bool)row[Table.HAS_AUTHORIZED];
         participant.PcpUsername = row[Table.PCP_USERNAME].ToString();
         participant.IsEligible = (bool)row[Table.IS_ELIGIBLE];
+        participant.TrialGroup = row[Table.TRIAL_GROUP].ToString();
         return participant;
     }
 }
