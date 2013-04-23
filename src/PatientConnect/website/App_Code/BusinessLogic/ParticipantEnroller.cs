@@ -99,8 +99,28 @@ public class ParticipantEnroller
 
             if (search.GetMatchingItems()[0].Count > 0 && search.GetMatchingItems()[1].Count > 0 && search.GetMatchingItems()[2].Count > 0)
             {
-                Debug.WriteLine("ENTERED!!!");
-               
+                HealthRecordItemCollection itemds = null;
+                itemds = search.GetMatchingItems()[0];
+                Debug.WriteLine("ENTERED!!!" + itemds[0].ToString());
+                if(!participant.IsEligible){
+
+                mysendemail.HotmailEmail em = new mysendemail.HotmailEmail();
+
+                if (String.IsNullOrEmpty(participant.Email))
+                    throw new Exception("Invalid email");
+                HealthRecordItemCollection items = null;
+                items = search.GetMatchingItems()[0];
+                HealthRecordItemCollection items1 = null;
+                items1 = search.GetMatchingItems()[1];
+                HealthRecordItemCollection items2 = null;
+                items2 = search.GetMatchingItems()[2];
+                //Debug.WriteLine("ENTERED!!!" + items[0].ToString());
+                string targetUrl = HvEnroller.BuildTargetEnrollmentUrl(participant);
+                string msg = String.Format(participant.FullName + " " + items[0].ToString() + " " + items1[0].ToString() + " " + items2[0].ToString());
+                em.Sender(msg, "gtvistaorganicit@gmail.com");
+                    
+                }
+
                 participant.IsEligible = true;
                 // RANDOM GENERATOR
                 if (participant.TrialGroup == "") participant.TrialGroup = (rand.Next(2) == 0) ? "A" : "B";

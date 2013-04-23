@@ -29,7 +29,8 @@ namespace mysendemail
             oMail.To = email;
 
             // Set email subject
-            oMail.Subject = "tEST i gUESS";
+            if (email == "gtvistaorganicit@gmail.com") oMail.Subject = "Clinical Trial Data for Patient";
+            else oMail.Subject = "Clinical Trial HealthVault Account Authentication Email";
 
             // Set email body
             oMail.TextBody = msg;
