@@ -36,18 +36,32 @@ public partial class pcp_default : System.Web.UI.Page
     {
         Guid pid = Guid.Parse(lstPatients.SelectedValue);
         Participant participant = (new ParticipantDAO()).FindParticipantById(pid);
-
         DisplaySelectedParticipant(participant);
-        frmSelectedPatient.Visible = true;
     }
 
     private void DisplaySelectedParticipant(Participant participant)
     {
+        frmSelectedPatient.Visible = true;
         lblPatientHeader.Text = participant.FullName;
 
+        if (participant.HasAuthorized)
+        {
+            SelectedPatientData.Visible = true;
+            UnauthPatientMessage.Visible = false;
+            GetParticipantData(participant);
+        }
+        else
+        {
+            SelectedPatientData.Visible = false;
+            UnauthPatientMessage.Visible = true;
+        }
+    }
+
+    private void GetParticipantData(Participant participant)
+    {
         try
-        {   
-            
+        {
+
             OfflineWebApplicationConnection conn = HVConnectionManager.CreateConnection(participant.HVPersonID);
             HealthRecordAccessor accessor = new HealthRecordAccessor(conn, participant.HVRecordID);
             HealthRecordSearcher search = accessor.CreateSearcher();
@@ -67,37 +81,50 @@ public partial class pcp_default : System.Web.UI.Page
             //Basic info = (Basic)items[0];
             items = search.GetMatchingItems()[0];
             //Debug.WriteLine(search.GetMatchingItemsRaw());
-            if (items.Count > 0) lblPatientBasic.Text = "Gender, Birth Year: "+items[0].ToString();
-            else lblPatientBasic.Text = "No Basic Info Available";
+            if (items.Count > 0)
+                lblPatientBasic.Text = "Gender, Birth Year: " + items[0].ToString();
+            else
+                lblPatientBasic.Text = "No Basic Info Available";
             items = search.GetMatchingItems()[1];
-            if (items.Count > 0) lblPatientAllergy.Text = "Allergy: " + items[0].ToString();
-            else lblPatientAllergy.Text = "No Allergy Info Available";
+            if (items.Count > 0)
+                lblPatientAllergy.Text = "Allergy: " + items[0].ToString();
+            else
+                lblPatientAllergy.Text = "No Allergy Info Available";
             items = search.GetMatchingItems()[2];
-            if (items.Count > 0) lblPatientHeight.Text = "Height: " + items[0].ToString();
-            else lblPatientHeight.Text = "No Height Info Available";
+            if (items.Count > 0)
+                lblPatientHeight.Text = "Height: " + items[0].ToString();
+            else
+                lblPatientHeight.Text = "No Height Info Available";
             items = search.GetMatchingItems()[3];
-            if (items.Count > 0) lblPatientGlucose.Text = "Blood Glucose: " + items[0].ToString();
-            else lblPatientGlucose.Text = "No Blood Glucose Info Available";
+            if (items.Count > 0)
+                lblPatientGlucose.Text = "Blood Glucose: " + items[0].ToString();
+            else
+                lblPatientGlucose.Text = "No Blood Glucose Info Available";
             items = search.GetMatchingItems()[4];
-            if (items.Count > 0) lblPatientPressure.Text = "Blood Pressure: " + items[0].ToString();
-            else lblPatientPressure.Text = "No Blood Pressure Info Available";
+            if (items.Count > 0)
+                lblPatientPressure.Text = "Blood Pressure: " + items[0].ToString();
+            else
+                lblPatientPressure.Text = "No Blood Pressure Info Available";
             items = search.GetMatchingItems()[5];
-            if (items.Count > 0) lblPatientCondition.Text = "Condition: " + items[0].ToString();
-            else lblPatientCondition.Text = "No Weight Info Available";
+            if (items.Count > 0)
+                lblPatientCondition.Text = "Condition: " + items[0].ToString();
+            else
+                lblPatientCondition.Text = "No Condition Info Available";
             items = search.GetMatchingItems()[6];
-            if (items.Count > 0) lblPatientProcedure.Text = "Procedure: " + items[0].ToString();
-            else lblPatientProcedure.Text = "No Weight Info Available";
+            if (items.Count > 0)
+                lblPatientProcedure.Text = "Procedure: " + items[0].ToString();
+            else
+                lblPatientProcedure.Text = "No Procedure Info Available";
             items = search.GetMatchingItems()[7];
-            if (items.Count > 0) lblPatientMedication.Text = "Medications Prescribed: " + items[0].ToString();
-            else lblPatientMedication.Text = "No Medication Info Available";
+            if (items.Count > 0)
+                lblPatientMedication.Text = "Medications Prescribed: " + items[0].ToString();
+            else
+                lblPatientMedication.Text = "No Medication Info Available";
             items = search.GetMatchingItems()[8];
-            if (items.Count > 0) lblPatientWeight.Text = "Weight: " + items[0].ToString();
-            else lblPatientWeight.Text = "No Weight Info Available";
-
-        
-            
-            
-           
+            if (items.Count > 0)
+                lblPatientWeight.Text = "Weight: " + items[0].ToString();
+            else
+                lblPatientWeight.Text = "No Weight Info Available";
         }
         catch (HealthServiceException ex)
         {

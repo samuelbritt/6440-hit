@@ -20,6 +20,11 @@
                     <asp:Label ID="lblLastUpdateDate" runat="server"></asp:Label>
                 </p>
             </li>
+            <li>
+                <p>
+                    <asp:Label ID="Success" runat="server"></asp:Label>
+                </p>
+            </li>
         </ol>
     </div>
     <div id="frmEnrollNewParticipant" class="form right expand">
@@ -134,8 +139,6 @@
                     Text="Enroll Participant" ValidationGroup="enroll" />
             </li>
         </ol>
-        <p class="form">
-        <asp:Label ID="Success" runat="server"></asp:Label>
-        </p>
+
     </div>
 </asp:Content>

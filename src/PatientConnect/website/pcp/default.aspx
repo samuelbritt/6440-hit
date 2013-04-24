@@ -12,45 +12,43 @@
             Your Patients
         </p>
         <asp:ListBox ID="lstPatients" CssClass="full" OnSelectedIndexChanged="lstPatients_SelectedIndexChanged"
-           AutoPostBack="true" runat="server" />
+            AutoPostBack="true" runat="server" />
     </div>
     <div id="frmSelectedPatient" class="form expand" runat="server">
         <p class="header">
             <asp:Label ID="lblPatientHeader" runat="server"></asp:Label>
-            
         </p>
-        <p class="header">
-        <asp:Label ID="lblPatientInfo" runat="server"></asp:Label>
+        <p id="UnauthPatientMessage" runat="server">
+            Patient has not yet authorized a HealthVault connection.
         </p>
-        <p class="header">
-        <asp:Label ID="lblPatientBasic" runat="server"></asp:Label>
-        </p>
-        <p class="header">
-            <asp:Label ID="lblPatientAllergy" runat="server"></asp:Label>
-        </p>
-        <p class="header">
-            <asp:Label ID="lblPatientGlucose" runat="server"></asp:Label>
-        </p>
-        <p class="header">
-            <asp:Label ID="lblPatientPressure" runat="server"></asp:Label>
-        </p>
-        <p class="header">
-            <asp:Label ID="lblPatientHeight" runat="server"></asp:Label>
-        </p>
-        <p class="header">
-            <asp:Label ID="lblPatientCondition" runat="server"></asp:Label>
-        </p>
-        <p class="header">
-            <asp:Label ID="lblPatientProcedure" runat="server"></asp:Label>
-        </p>
-
-
-
-        <p class="header">
-            <asp:Label ID="lblPatientWeight" runat="server"></asp:Label>
-        </p>
-        <p class="header">
-            <asp:Label ID="lblPatientMedication" runat="server"></asp:Label>
-        </p>
+        <ol id="SelectedPatientData" runat="server">
+            <li>
+                <asp:Label ID="lblPatientBasic" runat="server"></asp:Label>
+            </li>
+            <li>
+                <asp:Label ID="lblPatientAllergy" runat="server"></asp:Label>
+            </li>
+            <li>
+                <asp:Label ID="lblPatientGlucose" runat="server"></asp:Label>
+            </li>
+            <li>
+                <asp:Label ID="lblPatientPressure" runat="server"></asp:Label>
+            </li>
+            <li>
+                <asp:Label ID="lblPatientHeight" runat="server"></asp:Label>
+            </li>
+            <li>
+                <asp:Label ID="lblPatientCondition" runat="server"></asp:Label>
+            </li>
+            <li>
+                <asp:Label ID="lblPatientProcedure" runat="server"></asp:Label>
+            </li>
+            <li>
+                <asp:Label ID="lblPatientWeight" runat="server"></asp:Label>
+            </li>
+            <li>
+                <asp:Label ID="lblPatientMedication" runat="server"></asp:Label>
+            </li>
+        </ol>
     </div>
 </asp:Content>
