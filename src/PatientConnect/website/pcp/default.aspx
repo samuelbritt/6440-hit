@@ -8,23 +8,21 @@
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="body" runat="Server">
     <div id="frmMyPatients" class="form left quarter">
-        <p class="header">
-            Your Patients
-        </p>
+        <div class="header">
+            <span>Your Patients</span>
+        </div>
         <asp:ListBox ID="lstPatients" CssClass="full" OnSelectedIndexChanged="lstPatients_SelectedIndexChanged"
-            AutoPostBack="true" runat="server" />
+            AutoPostBack="true" Rows="10" runat="server" />
     </div>
     <div id="frmSelectedPatient" class="form expand" runat="server">
-        <p class="header">
-            <asp:Label ID="lblPatientHeader" runat="server"></asp:Label>
-        </p>
+        <div class="header">
+            <asp:Label ID="lblPatientHeader" runat="server" />
+            <asp:Label ID="lblPatientBasicInfo" CssClass="right" runat="server" />
+        </div>
         <p id="UnauthPatientMessage" runat="server">
             Patient has not yet authorized a HealthVault connection.
         </p>
         <ol id="SelectedPatientData" runat="server">
-            <li>
-                <asp:Label ID="lblPatientBasic" runat="server"></asp:Label>
-            </li>
             <li>
                 <asp:Label ID="lblPatientAllergy" runat="server"></asp:Label>
             </li>

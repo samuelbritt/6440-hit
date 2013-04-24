@@ -157,9 +157,14 @@ public partial class pcp_edit : System.Web.UI.Page
             new HealthServiceDateTime(DateTime.Now),
             new WeightValue(weight * 1.6, new DisplayValue(weight, "lbs", "lbs")));
         accessor.NewItem(w);
-        //Allergy allergy = new Allergy(
-        //CodableValue val = new CodableValue(tbAllergies.Text)
-        //Allergy allergy = new Allergy(val);
+
+
+        //CodableValue allergyCV = new CodableValue("Allergy");
+
+        //Allergy allergy = new Allergy(allergyCV);
+        //allergy.
+        //allergy.Name = "Cats";
+        //allergy.Reaction = "Itchy Eyes";
         //accessor.NewItem(allergy);
     }
 }

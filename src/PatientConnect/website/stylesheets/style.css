@@ -31,19 +31,19 @@
     width: 24%;
 }
 
-.form.right
+.right
 {
     float: right;
     margin-left: 10px;
 }
 
-.form.left
+.left
 {
     float: left;
     margin-right: 10px;
 }
 
-.form.center
+.center
 {
     margin: 0 auto;
 }
@@ -52,6 +52,11 @@
 {
     float: none;
     width: auto;
+    overflow: auto;
+}
+
+.form p
+{
     overflow: auto;
 }
 
@@ -66,7 +71,15 @@
 {
     font-weight: bold;
     background-color: #EEE;
-    padding: 6px;
+    height: 2em;
+    margin-bottom: 1ex;
+}
+.form .header span
+{
+    line-height: 2em;
+    margin: 0 1ex;
+    padding:0;
+    width: auto;
 }
 
 .form li
