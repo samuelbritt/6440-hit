@@ -10,6 +10,8 @@ using System.Xml.XPath;
 using System.Xml;
 using System.Collections.ObjectModel;
 using Logic;
+using System.Web.UI.WebControls;
+using System.Web.UI;
 
 
 public partial class dashboard_default : System.Web.UI.Page
@@ -45,7 +47,6 @@ public partial class dashboard_default : System.Web.UI.Page
         }
     }
 
-
     private ICollection<Participant> GetOncologistPatients()
     {
         ParticipantDAO dao = new ParticipantDAO();
@@ -73,7 +74,6 @@ public partial class dashboard_default : System.Web.UI.Page
         ParticipantDAO dao = new ParticipantDAO();
         return dao.FindParticipantById(pid);
     }
-
 
     protected void lstPatients_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -104,85 +104,24 @@ public partial class dashboard_default : System.Web.UI.Page
     {
         try
         {
+            HVDataAccessor accessor = new HVDataAccessor(participant);
+            AddAllFilters(accessor);
 
-            OfflineWebApplicationConnection conn = HVConnectionManager.CreateConnection(participant.HVPersonID);
-            HealthRecordAccessor accessor = new HealthRecordAccessor(conn, participant.HVRecordID);
-            HealthRecordSearcher search = accessor.CreateSearcher();
+            string nullText = "No information available";
+            lblPatientWeight.Text = accessor.GetItemString(Weight.TypeId, nullText);
+            lblPatientHeight.Text = accessor.GetItemString(Height.TypeId, nullText);
+            lblPatientGlucose.Text = accessor.GetItemString(BloodGlucose.TypeId, nullText);
+            lblPatientPressure.Text = accessor.GetItemString(BloodPressure.TypeId, nullText);
+            lblPatientCondition.Text = accessor.GetItemString(Condition.TypeId, nullText);
+            lblPatientProcedure.Text = accessor.GetItemString(Procedure.TypeId, nullText);
 
-            search.Filters.Add(new HealthRecordFilter(Basic.TypeId));
-            search.Filters.Add(new HealthRecordFilter(Personal.TypeId));
-            search.Filters.Add(new HealthRecordFilter(Allergy.TypeId));
-            search.Filters.Add(new HealthRecordFilter(Height.TypeId));
-            search.Filters.Add(new HealthRecordFilter(BloodGlucose.TypeId));
-            search.Filters.Add(new HealthRecordFilter(BloodPressure.TypeId));
-            search.Filters.Add(new HealthRecordFilter(Condition.TypeId));
-            search.Filters.Add(new HealthRecordFilter(Procedure.TypeId));
-            search.Filters.Add(new HealthRecordFilter(Medication.TypeId));
-            search.Filters.Add(new HealthRecordFilter(Weight.TypeId));
-            HealthRecordItemCollection items = null;
+            lstPatientMedication.DataSource = accessor.GetItemCollection(Medication.TypeId);
+            lstPatientMedication.DataBind();
 
-            ICollection<HealthRecordItemCollection> allItems = search.GetMatchingItems();
-            String ccdData = search.GetTransformedItems("toccd");
-            Debug.WriteLine(ccdData);
+            lstPatientAllergy.DataSource = accessor.GetItemCollection(Allergy.TypeId);
+            lstPatientAllergy.DataBind();
 
-            
-            Personal personalInfo;
-            Basic basicInfo;
-            int age = 0;
-            String genderStr = "";
-            //String allergies = "";
-            //double height = 0;
-            //double weight = 0;
-            //double bloodGlucose = 0;
-            //double bloodPressure = 0;
-            //string condition;
-            //string procedure;
-            //string medications;
-
-            //Basic info = (Basic)items[0];
-            items = search.GetMatchingItems()[0];
-            //Debug.WriteLine(search.GetMatchingItemsRaw());
-            if (items.Count > 0)
-            {
-                basicInfo = (Basic)items[0];
-                if (basicInfo != null)
-                {
-                    switch (basicInfo.Gender)
-                    {
-                        case Gender.Male:
-                            genderStr = "M";
-                            break;
-                        case Gender.Female:
-                            genderStr = "F";
-                            break;
-                    }
-                }
-            }
-
-            items = search.GetMatchingItems()[1];
-            if (items.Count > 0)
-            {
-                personalInfo = (Personal)items[0];
-                HealthServiceDateTime dob = personalInfo.BirthDate;
-                if (dob != null)
-                    age = GetAge(dob.ToDateTime());
-            }
-
-            lblPatientBasicInfo.Text = "";
-            if (age > 0)
-                lblPatientBasicInfo.Text = "Age " + age;
-            if (!String.IsNullOrEmpty(genderStr))
-                lblPatientBasicInfo.Text += " (" + genderStr + ")";
-
-            DisplayItem(search, 2, lblPatientAllergy);
-            DisplayItem(search, 3, lblPatientHeight);
-            DisplayItem(search, 4, lblPatientGlucose);
-            DisplayItem(search, 5, lblPatientPressure);
-            DisplayItem(search, 6, lblPatientCondition);
-            DisplayItem(search, 7, lblPatientProcedure);
-            //DisplayItem(search, 8, lblPatientMedication);
-            DisplayItem(search, 9, lblPatientWeight);
-
+            lblPatientBasicInfo.Text = BuildBasicInfoString(accessor);
         }
         catch (HealthServiceException ex)
         {
@@ -194,20 +133,62 @@ public partial class dashboard_default : System.Web.UI.Page
         }
     }
 
-    private void DisplayItem(HealthRecordSearcher searcher,
-        int filterNumber, System.Web.UI.WebControls.Label lbl)
+    private static void AddAllFilters(HVDataAccessor accessor)
     {
-        HealthRecordItemCollection items = searcher.GetMatchingItems()[filterNumber];
-        if (items.Count > 0)
-            lbl.Text = items[0].ToString();
-        else
-            lbl.Text = "No Information Available";
+        accessor.AddFilter(Basic.TypeId);
+        accessor.AddFilter(Personal.TypeId);
+        accessor.AddFilter(Allergy.TypeId);
+        accessor.AddFilter(Height.TypeId);
+        accessor.AddFilter(BloodGlucose.TypeId);
+        accessor.AddFilter(BloodPressure.TypeId);
+        accessor.AddFilter(Condition.TypeId);
+        accessor.AddFilter(Procedure.TypeId);
+        accessor.AddFilter(Medication.TypeId);
+        accessor.AddFilter(Weight.TypeId);
     }
 
-    private int GetAge(DateTime birthDate)
+    private string BuildBasicInfoString(HVDataAccessor accessor)
+    {
+        string basicInfo = "";
+        string genderStr = GetGenderString(accessor);
+        int age = GetAge(accessor);
+        if (age > 0)
+            basicInfo = "Age " + age;
+        if (!String.IsNullOrEmpty(genderStr))
+            basicInfo += " (" + genderStr + ")";
+        return basicInfo;
+    }
+
+    private string GetGenderString(HVDataAccessor accessor)
+    {
+        string genderStr = "";
+        Basic basicInfo = (Basic)accessor.GetItem(Basic.TypeId);
+        switch (basicInfo.Gender)
+        {
+            case Gender.Male:
+                genderStr = "M";
+                break;
+            case Gender.Female:
+                genderStr = "F";
+                break;
+        }
+        return genderStr;
+    }
+
+    private int GetAge(HVDataAccessor accessor)
+    {
+        int age = 0;
+        Personal personalInfo = (Personal)accessor.GetItem(Personal.TypeId);
+        HealthServiceDateTime dob = personalInfo.BirthDate;
+        if (dob != null)
+            age = YearsAfter(dob.ToDateTime());
+        return age;
+    }
+
+    private int YearsAfter(DateTime before)
     {
         // definitely not accurate...
-        return (int)DateTime.Now.Subtract(birthDate).TotalDays / 365;
+        return (int)DateTime.Now.Subtract(before).TotalDays / 365;
     }
 
     protected void btnEdit_Click(object sender, EventArgs e)
@@ -216,31 +197,13 @@ public partial class dashboard_default : System.Web.UI.Page
         Session["selected_patient_pid"] = pid;
         Response.Redirect("~/pcp/edit.aspx");
     }
+
     protected void btnGetCcd_Click(object sender, EventArgs e)
     {
-        Guid CCR_THING_GUID = new Guid("1e1ccbfc-a55d-4d91-8940-fa2fbf73c195");
-        Guid CCD_THING_GUID = new Guid("9c48a2b8-952c-4f5a-935d-f3292326bf54");
-
-        List<HealthRecordItem> ccdItems = GetValues<HealthRecordItem>(selectedParticipant, CCD_THING_GUID);
-
-        int ccrItemCount = 0;
-        string ccrFileName = "";
-        foreach (HealthRecordItem ccd in ccdItems)
-        {
-            // ccd xml data is in ccd.TypeSpecificData
-            Debug.WriteLine(ccd.TypeSpecificData.ToString());
-            ccrItemCount = ccrItemCount + 1;
-            ccrFileName = "CCR_" + ccrItemCount.ToString() + ".xml";
-            XPathDocument document = (XPathDocument)ccd.TypeSpecificData;
-            XPathNavigator documentNav = document.CreateNavigator();
-            XmlTextWriter writer = new XmlTextWriter(Server.MapPath(ccrFileName), System.Text.Encoding.UTF8);
-            writer.WriteStartDocument();
-            writer.WriteNode(documentNav, true);
-            writer.WriteEndDocument();
-            writer.Close();  
-
-        }
-
+        HVDataAccessor accessor = new HVDataAccessor(selectedParticipant);
+        AddAllFilters(accessor);
+        Debug.WriteLine("CCD:");
+        Debug.WriteLine(accessor.getCcd());
     }
 
     private HealthRecordSearcher GetSearcher(Participant participant)

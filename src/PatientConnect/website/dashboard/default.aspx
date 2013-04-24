@@ -33,19 +33,19 @@
                     Weight:</label>
                 <asp:Label ID="lblPatientWeight" runat="server"></asp:Label>
             </li>
-            <li>
+            <li class="long">
                 <label>
                     Allergies:</label>
-                <asp:Label ID="lblPatientAllergy" runat="server"></asp:Label>
+                <asp:ListBox ID="lstPatientAllergy" runat="server"></asp:ListBox>
             </li>
             <li>
                 <label>
-                    Blood Glucose:</label>
+                    Latest Blood Glucose:</label>
                 <asp:Label ID="lblPatientGlucose" runat="server"></asp:Label>
             </li>
             <li>
                 <label>
-                    Blood Pressure:</label>
+                    Latest Blood Pressure:</label>
                 <asp:Label ID="lblPatientPressure" runat="server"></asp:Label>
             </li>
             <li>
@@ -61,7 +61,7 @@
             <li class="long">
                 <label>
                     Medications:</label>
-                <asp:TextBox ID="lblPatientMedication" ReadOnly="true" runat="server"></asp:TextBox>
+                <asp:ListBox ID="lstPatientMedication" ReadOnly="true" runat="server"></asp:ListBox>
             </li>
             <li>
                 <label>
