@@ -26,6 +26,10 @@ public partial class redirect : System.Web.UI.Page
         {
             redirect = "~/it_officer";
         }
+        else if (Context.User.IsInRole(Roles.ADMIN))
+        {
+            redirect = "~/admin";
+        }
 
         Response.Redirect(redirect);
     }

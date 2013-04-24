@@ -8,5 +8,7 @@ public partial class MasterPage : System.Web.UI.MasterPage
     {
         LoginStatus.LogoutPageUrl = "~/default.aspx";
         LoginStatus.LogoutAction = LogoutAction.RedirectToLoginPage;
+        string FullName = String.Join(" ", new String[] {Profile.FirstName, Profile.LastName});
+        LoginName.FormatString = FullName + " ({0})";
     }
 }
