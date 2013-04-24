@@ -8,11 +8,11 @@ public partial class redirect : System.Web.UI.Page
         string redirect = "~/login.aspx";
         if (Context.User.IsInRole(Roles.ONCOLOGIST))
         {
-            redirect = "~/oncologist";
+            redirect = "~/dashboard";
         }
         else if (Context.User.IsInRole(Roles.PCP))
         {
-            redirect = "~/pcp";
+            redirect = "~/dashboard";
         }
         else if (Context.User.IsInRole(Roles.NURSE))
         {
