@@ -24,28 +24,50 @@
         </p>
         <ol id="SelectedPatientData" runat="server">
             <li>
-                <asp:Label ID="lblPatientAllergy" runat="server"></asp:Label>
-            </li>
-            <li>
-                <asp:Label ID="lblPatientGlucose" runat="server"></asp:Label>
-            </li>
-            <li>
-                <asp:Label ID="lblPatientPressure" runat="server"></asp:Label>
-            </li>
-            <li>
+                <label>
+                    Height:</label>
                 <asp:Label ID="lblPatientHeight" runat="server"></asp:Label>
             </li>
             <li>
-                <asp:Label ID="lblPatientCondition" runat="server"></asp:Label>
-            </li>
-            <li>
-                <asp:Label ID="lblPatientProcedure" runat="server"></asp:Label>
-            </li>
-            <li>
+                <label>
+                    Weight:</label>
                 <asp:Label ID="lblPatientWeight" runat="server"></asp:Label>
             </li>
             <li>
-                <asp:Label ID="lblPatientMedication" runat="server"></asp:Label>
+                <label>
+                    Allergies:</label>
+                <asp:Label ID="lblPatientAllergy" runat="server"></asp:Label>
+            </li>
+            <li>
+                <label>
+                    Blood Glucose:</label>
+                <asp:Label ID="lblPatientGlucose" runat="server"></asp:Label>
+            </li>
+            <li>
+                <label>
+                    Blood Pressure:</label>
+                <asp:Label ID="lblPatientPressure" runat="server"></asp:Label>
+            </li>
+            <li>
+                <label>
+                    Condition:</label>
+                <asp:Label ID="lblPatientCondition" runat="server"></asp:Label>
+            </li>
+            <li>
+                <label>
+                    Latest Procedure:</label>
+                <asp:Label ID="lblPatientProcedure" runat="server"></asp:Label>
+            </li>
+            <li class="long">
+                <label>
+                    Medications:</label>
+                <asp:TextBox ID="lblPatientMedication" ReadOnly="true" runat="server"></asp:TextBox>
+            </li>
+            <li>
+                <label>
+                    &nbsp;</label>
+                <asp:Button ID="btnGetCcd" OnClick="btnGetCcd_Click" Text="Get CCD" CssClass="buttons"
+                    runat="server" />
             </li>
         </ol>
     </div>
