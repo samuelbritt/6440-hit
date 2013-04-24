@@ -6,10 +6,12 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="Server">
     <div id="frmAuthParticipantsList" class="form left third">
-        <p class="header">
-            Authorized Participants</p>
+        <div class="header">
+            <p>
+                Authorized Participants</p>
+        </div>
         <ol>
-            <li>
+            <li class="long">
                 <asp:ListBox ID="lstAuthParticipants" runat="server" CssClass="full" Rows="10"></asp:ListBox>
             </li>
             <li>
@@ -28,12 +30,14 @@
         </ol>
     </div>
     <div id="frmEnrollNewParticipant" class="form right expand">
-        <p class="header">
-            Enroll New Participant</p>
+        <div class="header">
+            <p>
+                Enroll New Participant</p>
+        </div>
         <asp:ValidationSummary ID="ValidationSummary" runat="server" ValidationGroup="enroll"
             HeaderText="There were errors on the page:" />
         <ol>
-            <li>
+            <li class="long">
                 <ol>
                     <li>
                         <asp:Label ID="lblParticipantFirstName" Text="First Name:" AssociatedControlID="txtParticipantFirstName"
@@ -81,9 +85,11 @@
                     </li>
                 </ol>
             </li>
-            <li id="liAddPcp" runat="server">
-                <p class="header">
-                    New PCP</p>
+            <li id="liAddPcp" class="long" runat="server">
+                <div class="header">
+                    <p>
+                        New PCP</p>
+                </div>
                 <asp:ValidationSummary ID="newPcpValidationSummary" runat="server" ValidationGroup="newPcp"
                     HeaderText="There were errors on the page:" />
                 <asp:Label ID="lblUserExists" runat="server" CssClass="error-message" Visible="false">
@@ -124,7 +130,7 @@
                     </li>
                     <li>
                         <asp:Label ID="lblPassword" Text="Password:" AssociatedControlID="txtPassword" runat="server" />
-                        <asp:TextBox ID="txtPassword" runat="server" ValidationGroup="newPcp" />
+                        <asp:TextBox ID="txtPassword" runat="server" CssClass="third" ValidationGroup="newPcp" />
                         <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ControlToValidate="txtPassword"
                             ValidationGroup="newPcp" ErrorMessage="Password is required.">*</asp:RequiredFieldValidator>
                         <asp:Button ID="btnGenPassword" CssClass="buttons" runat="server" OnClick="btnGenPassword_Click"

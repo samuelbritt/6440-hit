@@ -16,19 +16,24 @@
     margin: 0;
 }
 
-.form.half
+.full
 {
-    width: 49%;
+    width: 100%!important;
 }
 
-.form.third
+.half
 {
-    width: 32%;
+    width: 49%!important;
 }
 
-.form.quarter
+.third
 {
-    width: 24%;
+    width: 32%!important;
+}
+
+.quarter
+{
+    width: 24%!important;
 }
 
 .right
@@ -74,7 +79,7 @@
     height: 2em;
     margin-bottom: 1ex;
 }
-.form .header span
+.form .header span, .form .header p
 {
     line-height: 2em;
     margin: 0 1ex;
@@ -84,8 +89,13 @@
 
 .form li
 {
-    padding: 6px 0;
     margin-bottom: 1px;
+    height: 2em;
+}
+
+.form li.long
+{
+    height: auto;
 }
 
 .form label
@@ -98,7 +108,7 @@
 .form label, .form span
 {
     width: 40%;
-    padding: 6px 0;
+    line-height: 2em;
 }
 
 .form input, .form textarea, .form select
@@ -108,10 +118,6 @@
     border: 1px solid #999999;
 }
 
-.form .full
-{
-    width: 100%;
-}
 
 .form input:focus, .form textarea:focus
 {
