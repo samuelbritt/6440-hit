@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Web.Configuration;
 using Microsoft.Health.Web;
 using HealthVaultHelper;
+using System.Xml.XPath;
 
 
 public partial class pcp_default : System.Web.UI.Page
@@ -134,5 +135,73 @@ public partial class pcp_default : System.Web.UI.Page
             msg += ex.Error.ErrorInfo + "\n" + ex.Message.ToString();
             Debug.WriteLine(msg);
         }
+    }
+    protected void btnEdit_Click(object sender, EventArgs e)
+    {
+        Guid pid = Guid.Parse(lstPatients.SelectedValue);
+        Session["selected_patient_pid"] = pid;
+        Response.Redirect("~/pcp/edit.aspx");
+    }
+    protected void btnGetCcd_Click(object sender, EventArgs e)
+    {
+        Guid CCR_THING_GUID = new Guid("1e1ccbfc-a55d-4d91-8940-fa2fbf73c195");
+        Guid CCD_THING_GUID = new Guid("9c48a2b8-952c-4f5a-935d-f3292326bf54");
+
+        Guid pid = Guid.Parse(lstPatients.SelectedValue);
+        Participant participant = GetParticipant(pid);
+
+        List<HealthRecordItem> ccdItems = GetValues<HealthRecordItem>(participant, CCD_THING_GUID);
+
+        foreach (HealthRecordItem ccd in ccdItems)
+        {
+            Debug.WriteLine(ccd.TypeSpecificData.ToString());
+            XPathNavigator nav = ccd.TypeSpecificData.CreateNavigator();
+            // ccd xml data is in ccd.TypeSpecificData
+        }
+
+    }
+
+    private Participant GetParticipant(Guid pid)
+    {
+        ParticipantDAO dao = new ParticipantDAO();
+        return dao.FindParticipantById(pid);
+    }
+
+    private HealthRecordSearcher GetSearcher(Participant participant)
+    {
+        OfflineWebApplicationConnection conn = HVConnectionManager.CreateConnection(participant.HVPersonID);
+        HealthRecordAccessor accessor = new HealthRecordAccessor(conn, participant.HVRecordID);
+        return accessor.CreateSearcher();
+    }
+
+    T GetSingleValue<T>(Participant participant, Guid typeID) where T : class
+    {
+        HealthRecordSearcher searcher = GetSearcher(participant);
+        HealthRecordFilter filter = new HealthRecordFilter(typeID);
+        searcher.Filters.Add(filter);
+        HealthRecordItemCollection items = searcher.GetMatchingItems()[0];
+        if (items != null && items.Count > 0)
+        {
+            return items[0] as T;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    List<T> GetValues<T>(Participant participant, Guid typeID) where T : HealthRecordItem
+    {
+        HealthRecordSearcher searcher = GetSearcher(participant);
+        HealthRecordFilter filter = new HealthRecordFilter(typeID);
+        searcher.Filters.Add(filter);
+        HealthRecordItemCollection items = searcher.GetMatchingItems()[0];
+        List<T> typedList = new List<T>();
+        foreach (HealthRecordItem item in items)
+        {
+            typedList.Add((T)item);
+        }
+
+        return typedList;
     }
 }
