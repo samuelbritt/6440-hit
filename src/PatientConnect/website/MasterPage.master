@@ -15,8 +15,10 @@
     <span id="loginControl">
         <asp:LoginView ID="LoginView1" runat="server">
             <AnonymousTemplate>
-                Not logged in</AnonymousTemplate>
+                Not logged in
+            </AnonymousTemplate>
             <LoggedInTemplate>
+                <asp:Label ID="LoginFullName" runat="server" />
             </LoggedInTemplate>
         </asp:LoginView>
         <asp:LoginName ID="LoginName" runat="server" />
