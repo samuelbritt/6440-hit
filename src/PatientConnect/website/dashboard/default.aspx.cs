@@ -121,7 +121,7 @@ public partial class dashboard_default : System.Web.UI.Page
             lstPatientAllergy.DataSource = accessor.GetItemCollection(Allergy.TypeId);
             lstPatientAllergy.DataBind();
 
-            lblPatientBasicInfo.Text = BuildBasicInfoString(accessor);
+            lblPatientBasicInfo.Text = accessor.BuildBasicInfoString();
         }
         catch (HealthServiceException ex)
         {
@@ -145,50 +145,6 @@ public partial class dashboard_default : System.Web.UI.Page
         accessor.AddFilter(Procedure.TypeId);
         accessor.AddFilter(Medication.TypeId);
         accessor.AddFilter(Weight.TypeId);
-    }
-
-    private string BuildBasicInfoString(HVDataAccessor accessor)
-    {
-        string basicInfo = "";
-        string genderStr = GetGenderString(accessor);
-        int age = GetAge(accessor);
-        if (age > 0)
-            basicInfo = "Age " + age;
-        if (!String.IsNullOrEmpty(genderStr))
-            basicInfo += " (" + genderStr + ")";
-        return basicInfo;
-    }
-
-    private string GetGenderString(HVDataAccessor accessor)
-    {
-        string genderStr = "";
-        Basic basicInfo = (Basic)accessor.GetItem(Basic.TypeId);
-        switch (basicInfo.Gender)
-        {
-            case Gender.Male:
-                genderStr = "M";
-                break;
-            case Gender.Female:
-                genderStr = "F";
-                break;
-        }
-        return genderStr;
-    }
-
-    private int GetAge(HVDataAccessor accessor)
-    {
-        int age = 0;
-        Personal personalInfo = (Personal)accessor.GetItem(Personal.TypeId);
-        HealthServiceDateTime dob = personalInfo.BirthDate;
-        if (dob != null)
-            age = YearsAfter(dob.ToDateTime());
-        return age;
-    }
-
-    private int YearsAfter(DateTime before)
-    {
-        // definitely not accurate...
-        return (int)DateTime.Now.Subtract(before).TotalDays / 365;
     }
 
     protected void btnEdit_Click(object sender, EventArgs e)
@@ -217,5 +173,11 @@ public partial class dashboard_default : System.Web.UI.Page
             String.Format("attachment; filename={0}", filename));
         doc.Save(Response.OutputStream);
         Response.End();
+    }
+
+    protected void btnSendEmail_Click(object sender, EventArgs e)
+    {
+        Session["selected_participant"] = selectedParticipant;
+        Response.Redirect("~/dashboard/communicate.aspx");
     }
 }

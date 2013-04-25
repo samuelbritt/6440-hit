@@ -68,6 +68,8 @@
                     &nbsp;</label>
                 <asp:Button ID="btnGetCcd" OnClick="btnGetCcd_Click" Text="Download CCD" CssClass="buttons"
                     runat="server" />
+                <asp:Button ID="btnSendEmail" OnClick="btnSendEmail_Click" Text="Send Email" CssClass="buttons"
+                    runat="server" />
             </li>
         </ol>
     </div>

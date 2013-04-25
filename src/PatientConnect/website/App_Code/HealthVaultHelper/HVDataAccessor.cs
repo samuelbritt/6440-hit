@@ -126,5 +126,58 @@ namespace HealthVaultHelper
             return Searcher.GetTransformedItems("toccd");
         }
 
+
+        // Assumes that the Basic and Personal info has been added to this accessor.
+        // returns something like "Age 24 (M)"
+        public string BuildBasicInfoString()
+        {
+            if (!filterMap.ContainsKey(Basic.TypeId))
+                AddFilter(Basic.TypeId);
+
+            if (!filterMap.ContainsKey(Personal.TypeId))
+
+                AddFilter(Personal.TypeId);
+
+            string basicInfo = "";
+            string genderStr = GetGenderString();
+            int age = GetAge();
+            if (age > 0)
+                basicInfo = "Age " + age;
+            if (!String.IsNullOrEmpty(genderStr))
+                basicInfo += " (" + genderStr + ")";
+            return basicInfo;
+        }
+
+        private string GetGenderString()
+        {
+            string genderStr = "";
+            Basic basicInfo = (Basic)GetItem(Basic.TypeId);
+            switch (basicInfo.Gender)
+            {
+                case Gender.Male:
+                    genderStr = "M";
+                    break;
+                case Gender.Female:
+                    genderStr = "F";
+                    break;
+            }
+            return genderStr;
+        }
+
+        private int GetAge()
+        {
+            int age = 0;
+            Personal personalInfo = (Personal)GetItem(Personal.TypeId);
+            HealthServiceDateTime dob = personalInfo.BirthDate;
+            if (dob != null)
+                age = YearsAfter(dob.ToDateTime());
+            return age;
+        }
+
+        private int YearsAfter(DateTime before)
+        {
+            // definitely not accurate...
+            return (int)DateTime.Now.Subtract(before).TotalDays / 365;
+        }
     }
 }

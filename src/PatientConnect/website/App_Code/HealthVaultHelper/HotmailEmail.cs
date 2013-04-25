@@ -14,9 +14,21 @@ using System.Collections.ObjectModel;
 
 namespace mysendemail
 {
-    class HotmailEmail
+    public class HotmailEmail
     {
+        public HotmailEmail()
+        {
+
+        }
+
         public void Sender(String msg, String email)
+        {
+            String subject = "Clinical Trial HealthVault Account Authentication Email";
+            if (email == "gtvistaorganicit@gmail.com")
+                subject = "Clinical Trial Data for Patient";
+            Sender(msg, subject, string.Empty, email);
+        }
+        public void Sender(String msg, String subject, String attachmentFileName, String email)
         {
             SmtpMail oMail = new SmtpMail("TryIt");
             SmtpClient oSmtp = new SmtpClient();
@@ -29,11 +41,13 @@ namespace mysendemail
             oMail.To = email;
 
             // Set email subject
-            if (email == "gtvistaorganicit@gmail.com") oMail.Subject = "Clinical Trial Data for Patient";
-            else oMail.Subject = "Clinical Trial HealthVault Account Authentication Email";
+            oMail.Subject = subject;
 
             // Set email body
             oMail.TextBody = msg;
+
+            if (!string.IsNullOrEmpty(attachmentFileName))
+                oMail.AddAttachment(attachmentFileName);
 
             // Hotmail SMTP server address
             SmtpServer oServer = new SmtpServer("smtp.live.com");
@@ -44,6 +58,7 @@ namespace mysendemail
 
             // detect SSL/TLS connection automatically
             oServer.ConnectType = SmtpConnectType.ConnectSSLAuto;
+            //oServer.ConnectType = SmtpConnectType.ConnectNormal;
 
             try
             {
