@@ -202,45 +202,20 @@ public partial class dashboard_default : System.Web.UI.Page
     {
         HVDataAccessor accessor = new HVDataAccessor(selectedParticipant);
         AddAllFilters(accessor);
-        Debug.WriteLine("CCD:");
-        Debug.WriteLine(accessor.getCcd());
+        String ccd = accessor.getCcd();
+        String filename = String.Format("ccd-{0}.{1}.xml",
+            selectedParticipant.LastName, selectedParticipant.FirstName);
+        SaveXmlFile(ccd, filename);
     }
 
-    private HealthRecordSearcher GetSearcher(Participant participant)
+    private void SaveXmlFile(string xml, string filename)
     {
-        OfflineWebApplicationConnection conn = HVConnectionManager.CreateConnection(participant.HVPersonID);
-        HealthRecordAccessor accessor = new HealthRecordAccessor(conn, participant.HVRecordID);
-        return accessor.CreateSearcher();
-    }
-
-    T GetSingleValue<T>(Participant participant, Guid typeID) where T : class
-    {
-        HealthRecordSearcher searcher = GetSearcher(participant);
-        HealthRecordFilter filter = new HealthRecordFilter(typeID);
-        searcher.Filters.Add(filter);
-        HealthRecordItemCollection items = searcher.GetMatchingItems()[0];
-        if (items != null && items.Count > 0)
-        {
-            return items[0] as T;
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-    List<T> GetValues<T>(Participant participant, Guid typeID) where T : HealthRecordItem
-    {
-        HealthRecordSearcher searcher = GetSearcher(participant);
-        HealthRecordFilter filter = new HealthRecordFilter(typeID);
-        searcher.Filters.Add(filter);
-        HealthRecordItemCollection items = searcher.GetMatchingItems()[0];
-        List<T> typedList = new List<T>();
-        foreach (HealthRecordItem item in items)
-        {
-            typedList.Add((T)item);
-        }
-
-        return typedList;
+        XmlDocument doc = new XmlDocument();
+        doc.LoadXml(xml);
+        Response.ContentType = "text/plain";
+        Response.AppendHeader("Content-Disposition",
+            String.Format("attachment; filename={0}", filename));
+        doc.Save(Response.OutputStream);
+        Response.End();
     }
 }

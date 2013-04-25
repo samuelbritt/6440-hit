@@ -61,12 +61,12 @@
             <li class="long">
                 <label>
                     Medications:</label>
-                <asp:ListBox ID="lstPatientMedication" ReadOnly="true" runat="server"></asp:ListBox>
+                <asp:ListBox ID="lstPatientMedication" runat="server"></asp:ListBox>
             </li>
             <li>
                 <label>
                     &nbsp;</label>
-                <asp:Button ID="btnGetCcd" OnClick="btnGetCcd_Click" Text="Get CCD" CssClass="buttons"
+                <asp:Button ID="btnGetCcd" OnClick="btnGetCcd_Click" Text="Download CCD" CssClass="buttons"
                     runat="server" />
             </li>
         </ol>
