@@ -65,5 +65,14 @@ namespace HealthVaultHelper
             }
             return PatientConnection.GetValidatedConnections(conn);
         }
+
+        /// <summary>
+        /// Get all authenticated participants
+        /// </summary>
+        /// <returns>A collection of <typeparamref name="ValidatedPatientConnection"/>s, which contain the PersonId, RecordId, etc.</returns>
+        public Collection<ValidatedPatientConnection> GetAuthorizedParticipants()
+        {
+            return GetAuthorizedParticipants(0);
+        }
     }
 }

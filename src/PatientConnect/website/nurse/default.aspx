@@ -2,7 +2,7 @@
     CodeFile="default.aspx.cs" Inherits="Default" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="h1" runat="Server">
-    Participant Dashboard
+    Enrollment Dashboard
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="Server">
     <div id="frmAuthParticipantsList" class="form left third">
@@ -12,20 +12,34 @@
         </div>
         <ol>
             <li class="long">
-                <asp:ListBox ID="lstAuthParticipants" runat="server" CssClass="full" Rows="10"></asp:ListBox>
+                <ol>
+                    <li class="long">
+                        <asp:ListBox ID="lstAuthParticipants" runat="server" CssClass="full" Rows="10"></asp:ListBox>
+                    </li>
+                    <li class="long">
+                        <asp:Button ID="btnCheckAuth" runat="server" Text="Check New Authorizations" CssClass="buttons"
+                            CausesValidation="false" OnClick="btnCheckAuth_Click" />
+                        <p >
+                            Last Update:
+                            <asp:Label ID="lblLastUpdateDate" runat="server"></asp:Label>
+                        </p>
+                    </li>
+                </ol>
             </li>
-            <li>
-                <asp:Button ID="btnCheckAuth" runat="server" Text="Check New Authorizations" CssClass="buttons"
-                    CausesValidation="false" OnClick="btnCheckAuth_Click" />
-                <p>
-                    Last Update:
-                    <asp:Label ID="lblLastUpdateDate" runat="server"></asp:Label>
-                </p>
-            </li>
-            <li>
-                <p>
-                    <asp:Label ID="Success" runat="server"></asp:Label>
-                </p>
+            <li class="long">
+                <div class="header">
+                    <p>
+                        Eligible Participants</p>
+                </div>
+                <ol>
+                    <li class="long">
+                        <asp:ListBox ID="lstEligible" runat="server" CssClass="full" Rows="10"></asp:ListBox>
+                    </li>
+                    <li>
+                        <asp:Button ID="btnCheckEligibility" runat="server" Text="Check Eligibility" CssClass="buttons"
+                            CausesValidation="false" OnClick="btnCheckEligibility_Click" />
+                    </li>
+                </ol>
             </li>
         </ol>
     </div>
@@ -78,7 +92,7 @@
                         <asp:Label ID="lblPcp" Text="Primary Physician:" AssociatedControlID="drpPcpList"
                             runat="server" />
                         <asp:DropDownList ID="drpPcpList" runat="server" OnSelectedIndexChanged="drpPcpList_SelectedIndexChange"
-                            AutoPostBack="true" >
+                            AutoPostBack="true">
                         </asp:DropDownList>
                         <asp:RequiredFieldValidator ID="vldDrpPcpList" runat="server" ControlToValidate="drpPcpList"
                             ValidationGroup="enroll" ErrorMessage="Primary care physician is required">*</asp:RequiredFieldValidator>
@@ -145,6 +159,5 @@
                     Text="Enroll Participant" ValidationGroup="enroll" />
             </li>
         </ol>
-
     </div>
 </asp:Content>

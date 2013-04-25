@@ -37,7 +37,7 @@ public class ParticipantEnroller
         participant.HasAuthorized = false;
         participant.IsEligible = false;
         participant.TrialGroup = "";
-        
+
         // get app-specific participant ID from database
         participant.ID = ParticipantDAO.InsertParticipant(participant);
 
@@ -55,97 +55,42 @@ public class ParticipantEnroller
     /// <param name="participant">Participant to enroll</param>
     private void SendEnrollmentEmail(Participant participant)
     {
-        Debug.WriteLine("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO " + participant.IsEligible);
-        //Debug.WriteLine("Arriba");
-        // TODO: actually send an email
         mysendemail.HotmailEmail em = new mysendemail.HotmailEmail();
 
         if (String.IsNullOrEmpty(participant.Email))
             throw new Exception("Invalid email");
 
         string targetUrl = HvEnroller.BuildTargetEnrollmentUrl(participant);
-        string msg = String.Format("This email is to allow the user with Email ID {0} with link to {1}", participant.Email, targetUrl);
-        em.Sender(msg, participant.Email);
+        string msg = String.Format(
+            "Dear {0} {1},\n" +
+            "Welcome to the Clinical Trial!\n" +
+            "Click below to authorize your Microsoft HealthVault account\n" +
+            "{2}",
+            participant.FirstName,
+            participant.LastName,
+            targetUrl);
         Debug.WriteLine(msg);
+        em.Sender(msg, participant.Email);
     }
 
     /// <summary>
     /// Updates the database with the newly authenticated participants.
     /// </summary>
-    public String UpdateAuthorizedParticipants()
+    public void UpdateAuthorizedParticipants()
     {
-        
-        String UnauthorizedPatients = "";
         // TODO: only check since the last update
-        Collection<ValidatedPatientConnection> patientConnections = HvEnroller.GetAuthorizedParticipants(0);
+        Collection<ValidatedPatientConnection> patientConnections = HvEnroller.GetAuthorizedParticipants();
         foreach (var validatedPatient in patientConnections)
         {
             Participant participant = ValidatedPatientConnectionToParticipant(validatedPatient);
-            //if (participant != null && (participant.HasAuthorized && !participant.IsEligible)) UnauthorizedPatients += participant.FullName + " || "; 
 
             if (participant == null)
                 continue;
             participant.HasAuthorized = true;
             participant.HVPersonID = validatedPatient.PersonId;
             participant.HVRecordID = validatedPatient.RecordId;
-            OfflineWebApplicationConnection conn = HVConnectionManager.CreateConnection(participant.HVPersonID);
-            HealthRecordAccessor accessor = new HealthRecordAccessor(conn, participant.HVRecordID);
-            HealthRecordSearcher search = accessor.CreateSearcher();
-            search.Filters.Add(new HealthRecordFilter(Basic.TypeId));
-            search.Filters.Add(new HealthRecordFilter(Condition.TypeId));
-            search.Filters.Add(new HealthRecordFilter(Procedure.TypeId));
-
-
-
-            if (search.GetMatchingItems()[0].Count > 0 && search.GetMatchingItems()[1].Count > 0 && search.GetMatchingItems()[2].Count > 0)
-            {
-                HealthRecordItemCollection itemds = null;
-                itemds = search.GetMatchingItems()[0];
-                Debug.WriteLine("ENTERED!!!" + itemds[0].ToString());
-                if(!participant.IsEligible){
-
-                mysendemail.HotmailEmail em = new mysendemail.HotmailEmail();
-
-                if (String.IsNullOrEmpty(participant.Email))
-                    throw new Exception("Invalid email");
-                HealthRecordItemCollection items = null;
-                items = search.GetMatchingItems()[0];
-                HealthRecordItemCollection items1 = null;
-                items1 = search.GetMatchingItems()[1];
-                HealthRecordItemCollection items2 = null;
-                items2 = search.GetMatchingItems()[2];
-                //Debug.WriteLine("ENTERED!!!" + items[0].ToString());
-                string targetUrl = HvEnroller.BuildTargetEnrollmentUrl(participant);
-                string msg = String.Format(participant.FullName + " " + items[0].ToString() + " " + items1[0].ToString() + " " + items2[0].ToString());
-                em.Sender(msg, "gtvistaorganicit@gmail.com");
-                    
-                }
-
-                participant.IsEligible = true;
-                // RANDOM GENERATOR
-                if (participant.TrialGroup == "") participant.TrialGroup = (rand.Next(2) == 0) ? "A" : "B";
-                Debug.WriteLine(participant.HasAuthorized.ToString(), " ", participant.IsEligible.ToString());
-                ParticipantDAO.UpdateParticipant(participant);
-                //return "AllAuthorized";
-            }
-            else
-            {
-                Debug.WriteLine("NOT ENTERED!!!");
-
-                participant.IsEligible = false;
-                participant.TrialGroup = "";
-                ParticipantDAO.UpdateParticipant(participant);
-                UnauthorizedPatients += participant.FullName + " || ";
-                //return UnauthorizedPatients;
-            }
-
-
-            
+            ParticipantDAO.UpdateParticipant(participant);
         }
-
-        if (UnauthorizedPatients.Length > 0) return UnauthorizedPatients;
-        else return "AllAuthorized";
-        
     }
 
     /// <summary>
@@ -167,6 +112,56 @@ public class ParticipantEnroller
         }
 
         return ParticipantDAO.FindParticipantById(participantId);
+    }
+
+    public void UpdateEligbleParticipants()
+    {
+        ICollection<Participant> authorizedParticipants = ParticipantDAO.GetAuthorizedParticipants();
+        foreach (Participant participant in authorizedParticipants)
+        {
+            if (participant.IsEligible)
+            {
+                continue;
+            }
+            else if (isEligible(participant))
+            {
+                participant.IsEligible = true;
+                participant.TrialGroup = GetRandomTrialGroup();
+                SendCcdToEhr(participant);
+                ParticipantDAO.UpdateParticipant(participant);
+            }
+        }
+    }
+
+
+    private bool isEligible(Participant participant)
+    {
+        HVDataAccessor accessor = new HVDataAccessor(participant);
+        accessor.AddFilter(Basic.TypeId);
+        accessor.AddFilter(Condition.TypeId);
+        accessor.AddFilter(Procedure.TypeId);
+
+        Basic basicInfo = (Basic)accessor.GetItem(Basic.TypeId);
+        Condition conditionInfo = (Condition)accessor.GetItem(Condition.TypeId);
+        Procedure procedureInfo = (Procedure)accessor.GetItem(Procedure.TypeId);
+
+        return (basicInfo != null &&
+            conditionInfo != null &&
+            procedureInfo != null &&
+            basicInfo.Gender == Gender.Female); // pretty low requirements...
+    }
+
+    private string GetRandomTrialGroup()
+    {
+        return (rand.Next(2) == 0) ? "A" : "B";
+    }
+
+    private void SendCcdToEhr(Participant participant)
+    {
+        HVDataAccessor accessor = new HVDataAccessor(participant);
+        accessor.AddAllFilters();
+        string ccd = accessor.getCcd();
+        new mysendemail.HotmailEmail().Sender(ccd, "gtvistaorganicit@gmail.com");
     }
 }
 

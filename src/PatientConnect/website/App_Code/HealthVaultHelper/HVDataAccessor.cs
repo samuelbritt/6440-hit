@@ -7,12 +7,28 @@ using System;
 using Microsoft.Health.Web;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using Microsoft.Health.ItemTypes;
 
 namespace HealthVaultHelper
 {
 
     public class HVDataAccessor
     {
+
+        public static Guid[] allKnownTypeIds = 
+        {
+            Basic.TypeId,
+            Personal.TypeId,
+            Allergy.TypeId,
+            Height.TypeId,
+            BloodGlucose.TypeId,
+            BloodPressure.TypeId,
+            Condition.TypeId,
+            Procedure.TypeId,
+            Medication.TypeId,
+            Weight.TypeId,
+        };
+
         public Participant Participant { get; set; }
 
         // Searcher for HV items. Will create connection and searcher on first access.
@@ -63,6 +79,14 @@ namespace HealthVaultHelper
             filterMap.Add(TypeId, filterIndex);
         }
 
+        public void AddAllFilters()
+        {
+            foreach (Guid typeID in allKnownTypeIds)
+            {
+                AddFilter(typeID);
+            }
+        }
+
         public HealthRecordItemCollection GetItemCollection(Guid TypeId)
         {
             return AllRecordItems[filterMap[TypeId]];
@@ -101,5 +125,6 @@ namespace HealthVaultHelper
         {
             return Searcher.GetTransformedItems("toccd");
         }
+
     }
 }

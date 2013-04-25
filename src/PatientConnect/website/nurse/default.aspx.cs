@@ -12,8 +12,9 @@ public partial class Default : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
-            lblLastUpdateDate.Text = getLastAuthUpdate();
+            lblLastUpdateDate.Text = getLastAuthUpdate().ToShortDateString();
             bindLstAuthorizedParticipants();
+            bindLstEligibleParticipants();
             bindDrpPcps();
             ResetPcpDropdown();
         }
@@ -55,6 +56,17 @@ public partial class Default : System.Web.UI.Page
         lstAuthParticipants.DataTextField = "FullName";
         lstAuthParticipants.DataValueField = "ID";
         lstAuthParticipants.DataBind();
+    }
+
+    private void bindLstEligibleParticipants()
+    {
+        ParticipantDAO dao = new ParticipantDAO();
+        ICollection<Participant> participantList = dao.GetEligibleParticipants();
+
+        lstEligible.DataSource = participantList;
+        lstEligible.DataTextField = "FullName";
+        lstEligible.DataValueField = "ID";
+        lstEligible.DataBind();
     }
 
     private void bindDrpPcps()
@@ -200,18 +212,18 @@ public partial class Default : System.Web.UI.Page
     protected void btnCheckAuth_Click(object sender, EventArgs e)
     {
         ParticipantEnroller enroller = new ParticipantEnroller();
-        String included=enroller.UpdateAuthorizedParticipants();
-        if (included == "AllAuthorized") Success.Text = "All Patients Included";
-        else Success.Text = "Patients not Satisfying Criteria: "+included;
+        enroller.UpdateAuthorizedParticipants();
+        //if (included == "AllAuthorized") Success.Text = "All Patients Included";
+        //else Success.Text = "Patients not Satisfying Criteria: "+included;
         setLastAuthUpdate(DateTime.Now);
         bindLstAuthorizedParticipants();
-        lblLastUpdateDate.Text = getLastAuthUpdate();
+        lblLastUpdateDate.Text = getLastAuthUpdate().ToShortDateString();
     }
 
-    private String getLastAuthUpdate()
+    private DateTime getLastAuthUpdate()
     {
         Application.Lock();
-        String lastUpdate = Application["lastAuthUpdate"].ToString();
+        DateTime lastUpdate = DateTime.Parse(Application["lastAuthUpdate"].ToString());
         Application.UnLock();
         return lastUpdate;
     }
@@ -239,4 +251,10 @@ public partial class Default : System.Web.UI.Page
         txtPassword.Text = Membership.GeneratePassword(totalLength, specialChars);
     }
 
+    protected void btnCheckEligibility_Click(object sender, EventArgs e)
+    {
+        ParticipantEnroller enroller = new ParticipantEnroller();
+        enroller.UpdateEligbleParticipants();
+        bindLstEligibleParticipants();
+    }
 }
